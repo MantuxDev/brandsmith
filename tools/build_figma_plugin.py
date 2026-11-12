@@ -41,16 +41,18 @@ sendSelection();
 BRIDGE = r"""
 // ---- Figma bridge ----
 window.FIGMA = true;
-document.querySelector('label[for=open]').hidden = true;
+// the selection on the canvas is the file: no "Change logo", no file picker
+document.head.insertAdjacentHTML('beforeend', '<style>label[for=open]{display:none!important}</style>');
 (function () {
-  const hint = (title, sub) => { $('#nav').innerHTML = ''; $('#pdf').disabled = true; $('#fname').textContent = '';
-    $('#main').innerHTML = `<section class="drop"><h1>${title}</h1><p>${sub}</p></section>`; };
+  let last = null;
+  const hint = (title, sub) => { last = [title, sub]; setChrome(false);
+    $('#main').innerHTML = `<main class="wrap"><div class="empty"><div class="hero"><h1>${title}</h1><p>${sub}</p></div></div></main>`; };
   const msgs = { en: ['Select your logo on the canvas', 'Select one frame, group, component or vector. The Lab analyses it as SVG, with text outlined. Nothing leaves Figma.', 'Select a single layer', 'Group the parts of the logo, or select its frame.'],
                  it: ['Seleziona il logo sulla tela', 'Seleziona un solo frame, gruppo, componente o vettore. Il Lab lo analizza come SVG, con i testi vettorializzati. Nulla esce da Figma.', 'Seleziona un solo livello', 'Raggruppa le parti del logo, oppure seleziona il suo frame.'] };
-  window.onmessage = e => { const m = e.data && e.data.pluginMessage; if (!m) return; const L = msgs[LANG] || msgs.en;
+  window.__figmaHint = kind => { const L = msgs[LANG] || msgs.en; kind === 'multi' ? hint(L[2], L[3]) : hint(L[0], L[1]); };
+  window.onmessage = e => { const m = e.data && e.data.pluginMessage; if (!m) return;
     if (m.type === 'svg') { const text = new TextDecoder().decode(new Uint8Array(m.bytes)); loadSvgText(text, (m.name || 'selection') + '.svg', false); }
-    else if (m.type === 'empty') hint(L[0], L[1]);
-    else if (m.type === 'multi') hint(L[2], L[3]);
+    else if (m.type === 'empty' || m.type === 'multi') { window.__figmaKind = m.type; window.__figmaHint(m.type); }
     else if (m.type === 'error') toast(m.message); };
 })();
 """
@@ -61,7 +63,7 @@ def main():
     # no network inside the plugin: drop web fonts (the CSS has full fallback stacks)
     s = "\n".join(l for l in s.splitlines() if "fonts.googleapis.com" not in l)
     s = s.replace("/*__DATA__*/", "window.DATA = null;", 1)
-    s = s.replace("if (DATA) start(); else showDrop();", BRIDGE + "\nshowDrop = function () {}; $('#main').innerHTML = '';\nparent.postMessage({ pluginMessage: { type: 'refresh' } }, '*');", 1)
+    s = s.replace("if (DATA) start(); else showDrop();", BRIDGE + "\nshowDrop = function () { window.__figmaHint(window.__figmaKind || 'empty'); }; setChrome(false); $('#main').innerHTML = '';\nparent.postMessage({ pluginMessage: { type: 'refresh' } }, '*');", 1)
     OUT.mkdir(exist_ok=True)
     (OUT / "ui.html").write_text(s, encoding="utf-8")
     (OUT / "code.js").write_text(CODE_JS, encoding="utf-8")
