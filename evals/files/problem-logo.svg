@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- Created with Inkscape -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="100">
+  <defs><linearGradient id="g"><stop offset="0" stop-color="#f00"/><stop offset="1" stop-color="#00f"/></linearGradient></defs>
+  <g transform="translate(10,0)"><path d="M0 0 l100 1 v50 h-100 z" fill="url(#g)" stroke="#333" stroke-width="2" opacity=".8"/></g>
+  <text x="10" y="90" font-family="Futura">ACME</text>
+</svg>

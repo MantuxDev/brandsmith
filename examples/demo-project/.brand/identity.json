@@ -1,0 +1,16 @@
+{
+  "name": "Tazzina Nuda",
+  "colors": [
+    {"name": "Ink", "role": "primary", "hex": "#14213D", "status": "candidate", "notes": "text and logo"},
+    {"name": "Amber", "role": "accent", "hex": "#FCA311", "status": "candidate", "notes": "signature warm colour"},
+    {"name": "Paper", "role": "background", "hex": "#F7F3EC", "status": "candidate", "notes": "receipt paper"}
+  ],
+  "typography": [
+    {"role": "display", "family": "Space Grotesk", "weights": [500, 700], "source": "Google Fonts", "license": "OFL", "fallback": "system-ui, sans-serif", "status": "candidate"},
+    {"role": "data", "family": "IBM Plex Mono", "weights": [400, 500], "source": "Google Fonts", "license": "OFL", "fallback": "ui-monospace, monospace", "status": "candidate"}
+  ],
+  "type_scale": {"base": 16, "ratio": 1.25},
+  "spacing": {"base": 8},
+  "radius": {"sm": 2, "md": 4},
+  "logo": {"master": "concepts/round-1/a-peak-mark.svg", "variants": {}, "clear_space": "", "min_size_px": null, "min_size_mm": null}
+}

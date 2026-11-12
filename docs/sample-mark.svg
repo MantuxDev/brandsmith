@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Sample mark for the Logo Lab demo report: a disc split by a hairline cut (1.2% of the mark),
+       plus a thin orbit line. Both read well at full size; both fail at small sizes. -->
+  <path fill="#1b2a4a" d="M100 18a82 82 0 0 1 0 164z"/>
+  <path fill="#1b2a4a" d="M97.6 18a82 82 0 0 0 0 164z"/>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="#e2573b" stroke-width="2"/>
+</svg>

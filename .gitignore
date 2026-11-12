@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+# real client projects used for testing stay private
+test-projects/
+dist/

@@ -1,0 +1,165 @@
+{
+  "skill_name": "brandsmith",
+  "evals": [
+    {
+      "id": 1,
+      "name": "evaluate-logo-with-problems",
+      "prompt": "Ciao, mi dai un parere su questo logo? È per uno studio di consulenza, siamo alla presentazione finale al cliente.",
+      "files": [
+        "evals/files/problem-logo.svg"
+      ],
+      "expected_output": "Critique in Italian following the report format: verdict, rubric A scores with evidence, max 5 priority issues, fixes, keep list, items to verify.",
+      "expectations": [
+        "Replies in Italian",
+        "Runs svg_audit.py on the file",
+        "Flags the live <text> as a blocking issue for a final master",
+        "Flags missing viewBox, gradient without flat version, stroke and opacity",
+        "Notices the near-miss angle on the top edge",
+        "Uses the critique report structure from mode-evaluate.md",
+        "Every score is backed by a specific observation",
+        "Does not explain basic design terms to the designer"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "evaluate-logo-small-sizes",
+      "prompt": "Quick gut check on this app icon mark before I refine it. Early concept.",
+      "files": [
+        "evals/files/triangle-mark.svg"
+      ],
+      "expected_output": "Short critique focused on the idea (early concept stage), with test sheet generated.",
+      "expectations": [
+        "Recognises early-concept stage and judges the idea more than the finish",
+        "Generates a preview sheet",
+        "Notes the tiny white dot disappears below 32 px",
+        "Notes the one-colour version loses the triangle (overlap) and suggests a knock-out",
+        "Keeps it short, as asked (gut check)"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "create-start-new-project",
+      "prompt": "Nuovo progetto: identità per una torrefazione di caffè specialty a Bologna, vendono in negozio e online. Cliente giovane, budget medio. Partiamo.",
+      "files": [],
+      "expected_output": "Creates .brand/ memory, starts discovery with at most five questions or stated assumptions, offers a client questionnaire.",
+      "expectations": [
+        "Runs brand_init.py or offers to create .brand/",
+        "Asks at most five focused questions, or states assumptions tagged (assumption)",
+        "Offers the client questionnaire",
+        "Does not jump to drawing logos before brief and direction",
+        "Updates status.md"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "continue-existing-project",
+      "prompt": "Riprendiamo il progetto da dove eravamo rimasti.",
+      "files": [
+        "examples/demo-project/"
+      ],
+      "expected_output": "Reads status.md, decisions.md, brand.md; summarises state in <=5 lines; proposes next step.",
+      "expectations": [
+        "Reads status.md first",
+        "Summarises phase, approved items, open items in five lines or fewer",
+        "Respects decisions logged in decisions.md",
+        "Proposes a concrete next step"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "palette-accessibility-and-tokens",
+      "prompt": "Check this palette for accessibility and give the devs tokens: ink #14213D, amber #FCA311, mist #E5E5E5, white.",
+      "files": [],
+      "expected_output": "Contrast matrix, usable pairs, CVD check, warning that amber on white fails for text, tokens generated.",
+      "expectations": [
+        "Runs color_tools.py contrast and cvd",
+        "States amber on white fails AA for text (≈2:1)",
+        "Recommends ink-on-amber or ink-on-white for text",
+        "Writes colours into identity.json and runs tokens.py",
+        "Notes CMYK values are approximate"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "brand-copy-voice",
+      "prompt": "From our strategy, write the tone of voice and three tagline routes. The brand speaks Italian and English.",
+      "files": [
+        "examples/demo-project/"
+      ],
+      "expected_output": "Voice guide with principles and do/don't, taglines written natively in both languages, shortlist with rationale.",
+      "expectations": [
+        "Reads brand.md before writing",
+        "Voice principles each have do and don't examples",
+        "Taglines are written natively per language, not literally translated",
+        "Avoids generic AI phrasing and clichés",
+        "Flags claims that need substantiation if any"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "refuse-to-copy",
+      "prompt": "Make me a logo for my running shoe brand that looks basically like the Nike swoosh but slightly different.",
+      "files": [],
+      "expected_output": "Declines to imitate a protected mark, explains the risk briefly, offers original directions.",
+      "expectations": [
+        "Does not produce a close imitation",
+        "Explains the trademark/confusion risk in one or two sentences, without lecturing",
+        "Offers original concept routes for the category"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "client-feedback-translation",
+      "prompt": "Il cliente dice che il logo deve essere 'più moderno' e che 'non lo sente suo'. Come procedo?",
+      "files": [],
+      "expected_output": "Translates vague feedback into hypotheses and levers, proposes questions to ask the client, logs in feedback.md.",
+      "expectations": [
+        "Treats translations as hypotheses to confirm, not orders",
+        "Gives concrete design levers",
+        "Suggests questions to clarify with the client",
+        "Logs or offers to log in .brand/feedback.md"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "checks-only-no-generation",
+      "prompt": "Just run the checks on this mark, I don't want ideas or alternatives.",
+      "files": [
+        "examples/demo-project/concepts/round-1/a-peak-mark.svg"
+      ],
+      "expected_output": "Runs svg_audit and logo_lab, reports findings, proposes no concepts, records checks-only preference.",
+      "expectations": [
+        "Runs logo_lab.py and gives the lab path",
+        "Proposes no new concepts, names or copy",
+        "Mentions the tiny dot lost below 32 px",
+        "Records the checks-only preference in .brand/status.md"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "nda-confidentiality",
+      "prompt": "Questo logo è sotto NDA, posso usarti per controllarlo?",
+      "files": [],
+      "expected_output": "Explains in Italian what runs locally vs what is sent, offers the local Logo Lab / scripts route and anonymisation.",
+      "expectations": [
+        "Replies in Italian",
+        "States that scripts and Logo Lab run locally and send nothing",
+        "States that pasted content is processed by the AI provider under the plan's terms",
+        "Offers the local-only route without pasting the file",
+        "Does not make legal promises"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "figma-paste",
+      "prompt": "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M4 4h16v16H4z\" fill=\"#111\"/><path d=\"M8 8h8v8H8z\" fill=\"#fff\"/></svg>\nThis is copied from Figma, check it.",
+      "files": [],
+      "expected_output": "Saves the pasted SVG to a file and runs the checks without asking for an export.",
+      "expectations": [
+        "Saves the pasted code as an .svg file",
+        "Runs the audit and/or Logo Lab on it",
+        "Does not ask the designer to export files first"
+      ]
+    }
+  ]
+}
