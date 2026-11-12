@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.4.0 — 2026-11-12
+- **Logo Lab redesign** (from the design handoff). Header with file chip (name, type, colour count), IT/EN
+  switch, "Change logo" and "Export report". Verdict card with score, minimum size, ruler 16–256 px and a
+  "To check" list that links to each flagged test; test index by section with status and counts; filter
+  "All tests / To check"; sections where everything passes start folded; every flagged test says what happens
+  and how to fix it. New empty state (drop area, paste from Figma/Illustrator with Ctrl+V, sample mark).
+  On phones: summary card, section chips and a fixed bottom bar.
+- **Export panel** replaces the direct PDF button: "For me / the studio" or "For the client", studio name,
+  client note, a page-1 preview, what each report includes, the PNG kit.
+- **Reports rebuilt.** Designer report, 4 A4 pages: verdict and 8 metrics with the limiting one highlighted,
+  "To check · N of 23" with page references; size and legibility (scale with below-minimum sizes marked, real
+  16/32 px pixels, four blur levels); form and context; reproduction, SVG file and next steps generated from
+  the warnings. Client report, 2 pages, no score or jargon: the mark, "At a glance", which version to use, the
+  studio's note, where the mark will live, what to avoid.
+- **New mark ("Mirino")** in the header, favicon, PDF header and Figma icon/cover; sources in `docs/brand/`.
+  The handoff geometry was adjusted (ring r 12.5 → 11.5, ticks 7.5 → 5.5 units) because the gap between ticks
+  and ring closed below 64 px; the adjusted mark scores 10/10 and holds at 16 px in Logo Lab.
+- Colour count ignores anti-aliased edges; distorted-mark example in the client report is actually distorted.
+- `tools/test_lab_ui.py`: headless smoke test of the interface and both reports (`--sample` rewrites
+  `docs/sample-report.pdf`). Figma plugin bridge updated for the new layout.
+- The measuring engine is unchanged: scores and minimum sizes are the same as 0.3.1.
+
 ## 0.3.1 — 2026-11-12
 - Eval run of the skill (11 cases, see `evals/notes/2026-11-12-eval-run.md`) and fixes from it:
   `lab_metrics.py` reads the real Lab score headlessly (the skill never estimates it); gut checks stay short;

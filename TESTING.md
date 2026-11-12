@@ -57,6 +57,9 @@ logo checklist so it never misses it again. Keep `SKILL.md` short; detail belong
 `evals/evals.json` holds repeatable test prompts with expected behaviours. Re-run them after significant
 changes (manually, or with Anthropic's skill-creator eval tooling) and check nothing regressed.
 
+After any change to the Logo Lab template, run `python3 tools/test_lab_ui.py` (headless Firefox + geckodriver):
+it checks the interface, both PDF reports, the phone layout and that the published page makes no network requests.
+
 ## 6. Promote good cases
 
 When a real project produced a great (or instructively bad) result, anonymise it and add it to `evals/evals.json`
