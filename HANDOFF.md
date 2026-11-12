@@ -13,17 +13,18 @@ groups, components and text layers; check that the PDF and PNG downloads work in
 send the files back to `code.js` and save them with `figma.ui`/clipboard alternatives); then publish to Figma
 Community (needs the author's Figma account).
 
-## 2. Installation instructions to verify before publishing
+## 2. Installation instructions: partly verified (2026-11-12)
 
-The README states, without verification against current docs:
-- Custom skills can be uploaded as a ZIP in the Claude app (Settings → Capabilities → Skills) on plans with
-  skills and code execution enabled.
-- Team/Enterprise plans can add organisation-wide skills via an admin.
-- `npx skills add <github-user>/brandsmith` installs it (replace `<github-user>`).
+Checked against Anthropic's help centre and the skills CLI docs:
+- Custom skills are uploaded as a ZIP with the skill folder at the top level (our ZIP: `brandsmith/SKILL.md`, OK)
+  and need code execution enabled. The menu path differs between help-centre pages (*Settings → Capabilities*
+  or *Customize → Skills*); both READMEs now mention both.
+- On Team/Enterprise, a skill uploaded by one person is private until shared with the organisation.
+- `npx skills add <owner>/<repo>` is the documented syntax (Vercel Labs `skills` CLI).
 
-**To do:** check each statement against Anthropic's current help centre and the skills CLI docs, test the ZIP
-from `tools/build_release.py` with a real upload, and fix the README wording. Also fill `[AUTHOR NAME]` in
-`LICENSE`.
+**Still to do:** a real upload of `dist/brandsmith-skill.zip` in the Claude app, then fix the menu wording;
+replace `<github-user>` once the repository exists; fill `[AUTHOR NAME]` in `LICENSE`. Checklist in
+`PUBLISHING.md`.
 
 ## 3. Logo Lab: report isolated specks in the Lab itself
 

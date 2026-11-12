@@ -58,6 +58,35 @@ document.head.insertAdjacentHTML('beforeend', '<style>label[for=open]{display:no
 """
 
 
+FIGMA_README = """# Logo Lab for Figma · Logo Lab per Figma
+
+**English** — Runs the Logo Lab checks on the selected layer, inside Figma. No AI, no account, nothing uploaded.
+A testing tool for brand designers: it supports your work, it doesn't replace it.
+
+## Install (Figma desktop app)
+1. Download this `figma-plugin` folder.
+2. In Figma: **Plugins → Development → Import plugin from manifest…** and pick `manifest.json`.
+3. Select your logo (one frame, group, component or vector) and run **Plugins → Development → Logo Lab**.
+
+The Lab updates when you change the selection. Text is outlined on export, so wordmarks are measured as drawn.
+*Export report* gives the studio and client PDFs and the PNG kit, as in the browser version.
+
+---
+
+**Italiano** — Esegue i controlli di Logo Lab sul livello selezionato, dentro Figma. Nessuna IA, nessun account,
+nulla caricato online. Uno strumento di verifica per brand designer: supporta il tuo lavoro, non lo sostituisce.
+
+## Installazione (app Figma desktop)
+1. Scarica questa cartella `figma-plugin`.
+2. In Figma: **Plugins → Development → Import plugin from manifest…** e scegli `manifest.json`.
+3. Seleziona il logo (un frame, gruppo, componente o vettore) e avvia **Plugins → Development → Logo Lab**.
+
+Il Lab si aggiorna quando cambi selezione. I testi vengono vettorializzati all'esportazione, quindi i logotipi
+sono misurati come disegnati. *Esporta report* offre i PDF per lo studio e per il cliente e il kit PNG, come
+nella versione per browser.
+"""
+
+
 def main():
     s = TEMPLATE.read_text(encoding="utf-8")
     # no network inside the plugin: drop web fonts (the CSS has full fallback stacks)
@@ -70,12 +99,7 @@ def main():
     manifest = {"name": "Logo Lab", "id": "logo-lab-brandsmith", "api": "1.0.0", "main": "code.js", "ui": "ui.html",
                 "editorType": ["figma"], "documentAccess": "dynamic-page", "networkAccess": {"allowedDomains": ["none"]}}
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    (OUT / "README.md").write_text(
-        "# Logo Lab for Figma\n\nRuns the Logo Lab checks on the selected layer, inside Figma. No AI, no account, nothing uploaded.\n\n"
-        "## Install (Figma desktop app)\n1. Download this `figma-plugin` folder.\n2. In Figma: **Plugins → Development → Import plugin from manifest…** and pick `manifest.json`.\n"
-        "3. Select your logo (one frame, group, component or vector) and run **Plugins → Development → Logo Lab**.\n\n"
-        "The Lab updates when you change the selection. Text is outlined on export, so wordmarks are measured as drawn.\n"
-        "The PDF report and PNG kit buttons work as in the browser version.\n", encoding="utf-8")
+    (OUT / "README.md").write_text(FIGMA_README, encoding="utf-8")
     print(f"Wrote {OUT}/manifest.json, code.js, ui.html, README.md")
 
 
