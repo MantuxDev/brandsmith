@@ -12,8 +12,8 @@ identity work, and it keeps every decision with them.
 
 ### 1. Before publishing
 
-- [ ] Fill `[AUTHOR NAME]` in `LICENSE`.
-- [ ] Replace `<github-user>` in `README.md` and `README.it.md` with the real GitHub account.
+- [x] `LICENSE` author filled in.
+- [x] Repository: https://github.com/MantuxDev/brandsmith
 - [ ] Rebuild everything from the sources (never edit generated files by hand):
   ```bash
   python3 tools/build_release.py           # dist/brandsmith-skill.zip + docs/index.html
@@ -42,7 +42,7 @@ identity work, and it keeps every decision with them.
 ### 3. Logo Lab on the web (GitHub Pages)
 
 `docs/index.html` is a single page that makes no network requests. In the repository settings → *Pages*, publish
-from the `master` branch, folder `/docs`. The Lab will be at `https://<github-user>.github.io/brandsmith/`.
+from the `master` branch, folder `/docs`. The Lab will be at `https://mantuxdev.github.io/brandsmith/`.
 Link it at the top of both READMEs once it is live.
 
 ### 4. Figma Community
@@ -72,8 +72,8 @@ lavorano già su brand e identità, e lascia a loro ogni decisione.
 
 ### 1. Prima di pubblicare
 
-- [ ] Inserisci il nome dell'autore al posto di `[AUTHOR NAME]` in `LICENSE`.
-- [ ] Sostituisci `<github-user>` in `README.md` e `README.it.md` con l'account GitHub reale.
+- [x] Autore inserito in `LICENSE`.
+- [x] Repository: https://github.com/MantuxDev/brandsmith
 - [ ] Rigenera tutto dai sorgenti (non modificare mai a mano i file generati):
   ```bash
   python3 tools/build_release.py           # dist/brandsmith-skill.zip + docs/index.html
@@ -103,7 +103,7 @@ lavorano già su brand e identità, e lascia a loro ogni decisione.
 ### 3. Logo Lab sul web (GitHub Pages)
 
 `docs/index.html` è una pagina unica che non fa richieste di rete. Nelle impostazioni del repository → *Pages*,
-pubblica dal branch `master`, cartella `/docs`. Il Lab sarà su `https://<github-user>.github.io/brandsmith/`.
+pubblica dal branch `master`, cartella `/docs`. Il Lab sarà su `https://mantuxdev.github.io/brandsmith/`.
 Quando è online, metti il link in cima a entrambi i README.
 
 ### 4. Figma Community

@@ -8,6 +8,8 @@ Illustrator. Ti toglie le parti ripetitive e verificabili del lavoro sull'identi
 esportazioni, token, linee guida, revisioni critiche) e, solo quando glielo chiedi, ti aiuta su strategia,
 concept e testi.
 
+**Prova Logo Lab nel browser:** https://mantuxdev.github.io/brandsmith/ (nulla viene caricato online)
+
 > **Supporta il lavoro del designer. Non lo sostituisce.**
 > Brandsmith è pensata per chi questo lavoro lo fa già: brand designer, studi di identità, art director.
 > Non progetta al posto tuo e non decide al posto tuo. Misura, controlla, documenta e propone;
@@ -92,7 +94,7 @@ disponibilità attuale.
 
 **Claude Code.**
 ```bash
-npx skills add <github-user>/brandsmith
+npx skills add MantuxDev/brandsmith
 ```
 oppure copia `skills/brandsmith/` in `~/.claude/skills/`.
 

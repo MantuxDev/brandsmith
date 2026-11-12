@@ -23,8 +23,7 @@ Checked against Anthropic's help centre and the skills CLI docs:
 - `npx skills add <owner>/<repo>` is the documented syntax (Vercel Labs `skills` CLI).
 
 **Still to do:** a real upload of `dist/brandsmith-skill.zip` in the Claude app, then fix the menu wording;
-replace `<github-user>` once the repository exists; fill `[AUTHOR NAME]` in `LICENSE`. Checklist in
-`PUBLISHING.md`.
+Repository published at https://github.com/MantuxDev/brandsmith; `LICENSE` filled. Checklist in `PUBLISHING.md`.
 
 ## 3. Logo Lab: report isolated specks in the Lab itself
 

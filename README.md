@@ -7,6 +7,8 @@ Logo Lab, a free logo stress test that runs in your browser, in Figma and in Ill
 checkable parts of identity work off your plate (logo tests, accessibility, exports, tokens, guidelines,
 critique) and, only when you ask, helps with strategy, concepts and copy.
 
+**Try Logo Lab in your browser:** https://mantuxdev.github.io/brandsmith/ (nothing is uploaded)
+
 > **It supports designers. It does not replace them.**
 > Brandsmith is built for people who already do this job: brand designers, identity studios, art directors.
 > It doesn't design for you and it doesn't decide for you. It measures, checks, documents and proposes;
@@ -89,7 +91,7 @@ check Anthropic's help centre for current availability.
 
 **Claude Code.**
 ```bash
-npx skills add <github-user>/brandsmith
+npx skills add MantuxDev/brandsmith
 ```
 or copy `skills/brandsmith/` into `~/.claude/skills/`.
 
