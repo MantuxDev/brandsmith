@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Logo Lab</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cstyle%3E.i%7Bfill:%2315171c%7D.s%7Bstroke:%2315171c%7D@media(prefers-color-scheme:dark)%7B.i%7Bfill:%23fff%7D.s%7Bstroke:%23fff%7D%7D%3C/style%3E%3Ccircle class='s' cx='24' cy='24' r='12.5' fill='none' stroke-width='4.5'/%3E%3Crect class='i' x='21.75' y='1' width='4.5' height='7.5' rx='1'/%3E%3Crect class='i' x='21.75' y='39.5' width='4.5' height='7.5' rx='1'/%3E%3Crect class='i' x='1' y='21.75' width='7.5' height='4.5' rx='1'/%3E%3Crect class='i' x='39.5' y='21.75' width='7.5' height='4.5' rx='1'/%3E%3Ccircle cx='24' cy='24' r='4' fill='%23d0126c'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cstyle%3E.i%7Bfill:%2315171c%7D.s%7Bstroke:%2315171c%7D@media(prefers-color-scheme:dark)%7B.i%7Bfill:%23fff%7D.s%7Bstroke:%23fff%7D%7D%3C/style%3E%3Ccircle class='s' cx='24' cy='24' r='11.5' fill='none' stroke-width='4.5'/%3E%3Crect class='i' x='21.75' y='1' width='4.5' height='5.5' rx='1'/%3E%3Crect class='i' x='21.75' y='41.5' width='4.5' height='5.5' rx='1'/%3E%3Crect class='i' x='1' y='21.75' width='5.5' height='4.5' rx='1'/%3E%3Crect class='i' x='41.5' y='21.75' width='5.5' height='4.5' rx='1'/%3E%3Ccircle cx='24' cy='24' r='4' fill='%23d0126c'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
@@ -296,7 +296,7 @@ html { scroll-behavior: smooth }
 <body>
 <header class="bar">
   <div class="wrap">
-    <div class="brand"><svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="12.5" fill="none" stroke="currentColor" stroke-width="4.5"/><rect x="21.75" y="1" width="4.5" height="7.5" rx="1" fill="currentColor"/><rect x="21.75" y="39.5" width="4.5" height="7.5" rx="1" fill="currentColor"/><rect x="1" y="21.75" width="7.5" height="4.5" rx="1" fill="currentColor"/><rect x="39.5" y="21.75" width="7.5" height="4.5" rx="1" fill="currentColor"/><circle cx="24" cy="24" r="4" fill="var(--accent)"/></svg><span>Logo Lab</span></div>
+    <div class="brand"><svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="11.5" fill="none" stroke="currentColor" stroke-width="4.5"/><rect x="21.75" y="1" width="4.5" height="5.5" rx="1" fill="currentColor"/><rect x="21.75" y="41.5" width="4.5" height="5.5" rx="1" fill="currentColor"/><rect x="1" y="21.75" width="5.5" height="4.5" rx="1" fill="currentColor"/><rect x="41.5" y="21.75" width="5.5" height="4.5" rx="1" fill="currentColor"/><circle cx="24" cy="24" r="4" fill="var(--accent)"/></svg><span>Logo Lab</span></div>
     <div class="filechip" id="filechip" hidden><img alt=""><span class="n"></span><span class="m"></span></div>
     <div class="grow"></div>
     <div class="lang" role="group" id="langgroup"><button type="button" data-lang="it">IT</button><button type="button" data-lang="en">EN</button></div>
@@ -1208,8 +1208,8 @@ function pdfKit() {
   k.LINE = (x1, y1, x2, y2 = y1, color = C.rule, lw = .75) => { k.ops += `${rgb(color)} RG ${lw} w ${f(x1)} ${f(PH - y1)} m ${f(x2)} ${f(PH - y2)} l S\n`; };
   // the Logo Lab mark (direction A, "Mirino"), drawn as vectors: s = size in pt
   k.MARK = (x, y, s, ink = C.ink, accent = C.accent) => { const u = s / 48;
-    k.CIRC(x + 24 * u, y + 24 * u, 12.5 * u, null, ink, 4.5 * u);
-    for (const [rx, ry, w, h] of [[21.75, 1, 4.5, 7.5], [21.75, 39.5, 4.5, 7.5], [1, 21.75, 7.5, 4.5], [39.5, 21.75, 7.5, 4.5]]) k.RR(x + rx * u, y + ry * u, w * u, h * u, u, ink);
+    k.CIRC(x + 24 * u, y + 24 * u, 11.5 * u, null, ink, 4.5 * u);
+    for (const [rx, ry, w, h] of [[21.75, 1, 4.5, 5.5], [21.75, 41.5, 4.5, 5.5], [1, 21.75, 5.5, 4.5], [41.5, 21.75, 5.5, 4.5]]) k.RR(x + rx * u, y + ry * u, w * u, h * u, u, ink);
     k.CIRC(x + 24 * u, y + 24 * u, 4 * u, accent); };
   // images: drawn to fit inside the box (contain), centred; returns the drawn rectangle
   k.IM = (cv, x, y, w, h, bg) => { if (!cv) return; const ar = cv.width / cv.height; let dw = w, dh = w / ar; if (h && dh > h) { dh = h; dw = h * ar; }
