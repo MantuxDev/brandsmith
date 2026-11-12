@@ -193,6 +193,18 @@ pre.src { margin: 0; max-height: 300px; overflow: auto; padding: 12px; border-ra
 footer.page { padding: 8px 0 24px; font-size: 12px; color: var(--muted) }
 
 /* empty state */
+.loading { max-width: 520px; margin: 0 auto; padding-block: 96px 64px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center }
+.loading .spin { width: 72px; height: 72px; color: var(--ink); animation: ll-spin 1.1s linear infinite; will-change: transform }
+.loading .spin .c { fill: var(--accent) }
+@keyframes ll-spin { to { transform: rotate(360deg) } }
+.loading h1 { margin: 0; font: 700 26px/1.2 var(--f-display) }
+.loading .ld-stage { font-size: 15px; color: var(--ink-2); min-height: 1.4em }
+.loading .ld-bar { width: 100%; max-width: 360px; height: 6px; border-radius: 3px; background: var(--rule); overflow: hidden }
+.loading .ld-bar i { display: block; height: 100%; width: 8%; background: var(--accent); border-radius: 3px; transition: width .2s }
+.loading .ld-bar.indet i { width: 30%; animation: ll-slide 1.2s ease-in-out infinite; will-change: transform }
+@keyframes ll-slide { from { transform: translateX(-100%) } to { transform: translateX(340%) } }
+.loading .note { font-size: 13px; color: var(--muted) }
+@media (prefers-reduced-motion: reduce) { .loading .spin { animation-duration: 3s } .loading .ld-bar.indet i { animation-duration: 3s } }
 .empty { max-width: 1040px; margin: 0 auto; padding-block: 56px 48px; display: flex; flex-direction: column; gap: 32px }
 .empty .hero { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center }
 .empty h1 { margin: 0; font: 700 44px/1.05 var(--f-display); letter-spacing: -.02em; text-wrap: balance }
@@ -325,6 +337,7 @@ const I18N = {
     bg: 'Preview background', bgWhite: 'White', bgPaper: 'Light grey', bgInk: 'Black', bgBrand: 'Brand colour',
     brand: 'Brand name', color: 'Brand colour', ink: 'One colour', sampleTag: 'sample mark', index: 'Test index', verdictNav: 'Verdict',
     eHead: 'Stress-test it before the client sees it.', eSub: 'Over 20 tests of size, form, context and print on your logo, with a minimum size and a PDF report.',
+    ldTitle: 'Analysing your logo…', ldRead: 'Reading the file', ldMeasure: 'Measuring strokes and gaps at 512 px', ldTests: 'Drawing the tests · {i} of {n}', ldNote: 'Everything runs on this computer: it takes a few seconds, nothing is uploaded.',
     eDrop: 'Drop your logo here', eDropSub: 'SVG recommended · a PNG with a transparent background works too · or paste from Figma or Illustrator (Ctrl+V)',
     choose: 'Choose a file', sample: 'No file to hand? Try the sample mark →',
     e1h: 'No upload', e1p: 'Everything runs in this page. The file never leaves your computer: fine for work under NDA.',
@@ -419,6 +432,7 @@ const I18N = {
     bg: 'Sfondo anteprima', bgWhite: 'Bianco', bgPaper: 'Grigio chiaro', bgInk: 'Nero', bgBrand: 'Colore brand',
     brand: 'Nome del brand', color: 'Colore brand', ink: 'Una tinta', sampleTag: 'marchio di esempio', index: 'Indice dei test', verdictNav: 'Verdetto',
     eHead: 'Mettilo alla prova prima del cliente.', eSub: 'Oltre 20 test di dimensioni, forma, contesto e stampa sul tuo logo, con dimensione minima e report PDF.',
+    ldTitle: 'Sto analizzando il logo…', ldRead: 'Lettura del file', ldMeasure: 'Misura di tratti e spazi a 512 px', ldTests: 'Preparazione dei test · {i} di {n}', ldNote: 'Tutto gira su questo computer: servono pochi secondi, nulla viene caricato online.',
     eDrop: 'Trascina qui il tuo logo', eDropSub: 'SVG consigliato · va bene anche un PNG con sfondo trasparente · oppure incolla da Figma o Illustrator (Ctrl+V)',
     choose: 'Scegli un file', sample: 'Non hai un file sottomano? Prova il marchio di esempio →',
     e1h: 'Niente upload', e1p: 'Tutto gira in questa pagina. Il file non lascia il tuo computer: ok anche per lavori sotto NDA.',
@@ -519,12 +533,36 @@ const SAMPLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><r
 const state = { name: 'Brand', color: '#1F2937', mono: '#141414', proofBg: 'sheet', sample: false, studio: '', note: '', filter: 'all', mode: 'designer', opened: new Set(), closed: new Set() };
 try { state.studio = localStorage.getItem('logolab-studio') || ''; } catch (e) {}
 const IMG = new Image();
-IMG.onload = () => { analyse(); if (location.hash === '#metrics') return; computeAll(); render(); };
-IMG.onerror = () => toast('Could not read this logo. For SVG, check it has a viewBox or width/height.');
+// loading: the measuring pass is one synchronous block, so the page first paints a loading screen
+// (its spinner is a CSS transform, which keeps turning while the script works) and then yields between tests
+const LOAD = { token: 0 };
+// rAF lets the browser paint; it pauses in hidden tabs, so a timer resolves the wait anyway
+const nextFrame = () => new Promise(r => { let done = false; const go = () => { if (!done) { done = true; setTimeout(r, 0); } }; requestAnimationFrame(go); setTimeout(go, 60); });
+function showLoading(stage, i, n) {
+  let el = document.querySelector('#main .loading');
+  if (!el) {
+    $('#main').innerHTML = `<main class="wrap"><div class="loading" role="status" aria-live="polite">
+      <svg class="spin" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="11.5" fill="none" stroke="currentColor" stroke-width="4.5"/><rect x="21.75" y="1" width="4.5" height="5.5" rx="1" fill="currentColor"/><rect x="21.75" y="41.5" width="4.5" height="5.5" rx="1" fill="currentColor"/><rect x="1" y="21.75" width="5.5" height="4.5" rx="1" fill="currentColor"/><rect x="41.5" y="21.75" width="5.5" height="4.5" rx="1" fill="currentColor"/><circle class="c" cx="24" cy="24" r="4"/></svg>
+      <h1>${t('ldTitle')}</h1><div class="ld-stage"></div><div class="ld-bar indet"><i></i></div><div class="note">${t('ldNote')}</div></div></main>`;
+    el = document.querySelector('#main .loading');
+  }
+  el.querySelector('.ld-stage').textContent = stage === 'tests' ? t('ldTests', { i, n }) : t(stage === 'read' ? 'ldRead' : 'ldMeasure');
+  const bar = el.querySelector('.ld-bar'), fill = bar.querySelector('i');
+  if (stage === 'tests') { bar.classList.remove('indet'); fill.style.width = Math.round(8 + 92 * i / n) + '%'; } else { bar.classList.add('indet'); fill.style.width = ''; }
+}
+IMG.onload = async () => {
+  const token = ++LOAD.token;
+  if (location.hash !== '#metrics') { showLoading('measure'); await nextFrame(); await nextFrame(); if (token !== LOAD.token) return; }
+  analyse(); if (location.hash === '#metrics') return;
+  if (!(await computeAllAsync(token))) return;
+  render();
+};
+IMG.onerror = () => { LOAD.token++; toast('Could not read this logo. For SVG, check it has a viewBox or width/height.'); showDrop(); }
 function start() {
   state.name = DATA.name || DATA.file.replace(/\.[^.]+$/, ''); state.color = DATA.color || state.color;
   if (!DATA.uri && DATA.svg) DATA.uri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgWithSize(DATA.svg));
   state.opened.clear(); state.closed.clear(); state.filter = 'all';
+  if (location.hash !== '#metrics') { setChrome(false); showLoading('read'); }
   IMG.src = DATA.uri;
 }
 function svgWithSize(text) {
@@ -923,6 +961,20 @@ function computeAll() {
   }
   if (DATA.svg) { const si = srcInfo(); LIVE.src = { info: si, status: si.live || si.img ? 'warn' : 'ok', readout: [] }; RES.push({ id: 'src', sec: 'file' }); }
   LIVE.kit = { status: 'ok', readout: [] }; RES.push({ id: 'kit', sec: 'file' });
+}
+// same work as computeAll, one test per frame, so the page can paint the progress in between
+async function computeAllAsync(token) {
+  RES = []; const list = TESTS.filter(T => !T.svgOnly || DATA.svg);
+  for (let i = 0; i < list.length; i++) {
+    if (token !== LOAD.token) return false;
+    const T = list[i], live = LIVE[T.id] || (LIVE[T.id] = { opt: 0, val: T.slider ? T.slider.value : 0 });
+    try { drawTest(T); } catch (e) { live.canvas = null; live.error = e.message; }
+    live.status = T.status ? T.status(live.info) : 'ok'; live.readout = T.readout ? T.readout(live.info) : [];
+    RES.push({ id: T.id, sec: T.sec, T }); showLoading('tests', i + 1, list.length); await nextFrame();
+  }
+  if (DATA.svg) { const si = srcInfo(); LIVE.src = { info: si, status: si.live || si.img ? 'warn' : 'ok', readout: [] }; RES.push({ id: 'src', sec: 'file' }); }
+  LIVE.kit = { status: 'ok', readout: [] }; RES.push({ id: 'kit', sec: 'file' });
+  return token === LOAD.token;
 }
 const flagged = () => RES.filter(r => isFlag(LIVE[r.id].status));
 function flagText(id) {

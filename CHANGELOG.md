@@ -17,6 +17,8 @@
 - **New mark ("Mirino")** in the header, favicon, PDF header and Figma icon/cover; sources in `docs/brand/`.
   The handoff geometry was adjusted (ring r 12.5 → 11.5, ticks 7.5 → 5.5 units) because the gap between ticks
   and ring closed below 64 px; the adjusted mark scores 10/10 and holds at 16 px in Logo Lab.
+- **Loading screen** while the logo is analysed (the measuring pass takes a few seconds and used to look like a
+  freeze): turning mark, current step, and a progress bar while the tests are drawn.
 - Colour count ignores anti-aliased edges; distorted-mark example in the client report is actually distorted.
 - `tools/test_lab_ui.py`: headless smoke test of the interface and both reports (`--sample` rewrites
   `docs/sample-report.pdf`). Figma plugin bridge updated for the new layout.

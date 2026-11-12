@@ -56,6 +56,14 @@ def main():
         check("empty state: drop area and sample button", ff.js("return !!document.querySelector('.drop') && !!document.querySelector('#sample')"))
         check("empty state: header actions hidden", ff.js("return getComputedStyle(document.querySelector('#exportBtn')).display === 'none' && getComputedStyle(document.querySelector('#filechip')).display === 'none'"))
 
+        ff.js("document.querySelector('#sample').click(); return 1")
+        check("loading screen while analysing", ff.js("return !!document.querySelector('.loading')"))
+        t0 = time.time()
+        while time.time() - t0 < 30 and ff.js("return !!document.querySelector('.loading')"): time.sleep(.5)
+        print(f"     analysis took {time.time() - t0:.1f} s; document.hidden =", ff.js("return document.hidden"))
+        st = ff.js("return [document.querySelector('.loading') && document.querySelector('.loading .stage').textContent, !!document.querySelector('.loading'), !!document.querySelector('#main .app')]")
+        check("loading screen replaced by results", st[1:] == [False, True], str(st))
+
         ff.get((OUT / "sample.html").as_uri()); time.sleep(6)
         r = ff.js("return window.__LAB_RESULT__ && { score: window.__LAB_RESULT__.score, min: window.__LAB_RESULT__.minSize }")
         check("sample analysed", bool(r), str(r))
