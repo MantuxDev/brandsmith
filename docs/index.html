@@ -4,177 +4,309 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Logo Lab</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cstyle%3E.i%7Bfill:%2315171c%7D.s%7Bstroke:%2315171c%7D@media(prefers-color-scheme:dark)%7B.i%7Bfill:%23fff%7D.s%7Bstroke:%23fff%7D%7D%3C/style%3E%3Ccircle class='s' cx='24' cy='24' r='12.5' fill='none' stroke-width='4.5'/%3E%3Crect class='i' x='21.75' y='1' width='4.5' height='7.5' rx='1'/%3E%3Crect class='i' x='21.75' y='39.5' width='4.5' height='7.5' rx='1'/%3E%3Crect class='i' x='1' y='21.75' width='7.5' height='4.5' rx='1'/%3E%3Crect class='i' x='39.5' y='21.75' width='7.5' height='4.5' rx='1'/%3E%3Ccircle cx='24' cy='24' r='4' fill='%23d0126c'/%3E%3C/svg%3E">
 <style>
-/* Layout: a press-check report. Verdict first (specimen on a proof sheet + the numbers), then the tests grouped
-   by question, each test one proof figure with a caption. Accent = process magenta, used only for marks. */
+/* Layout: test bench. Left column = the specimen and its settings plus an index of the tests; right = verdict
+   first (score, minimum size, what to check), then the tests grouped by question. Sections that pass are folded.
+   Accent = process magenta, used for marks, links and selection only. */
 :root {
-  --paper: #eef0f3; --sheet: #ffffff; --ink: #15171c; --ink-2: #3a3f49; --muted: #646b78; --rule: #dadee5; --rule-2: #c5cad3;
-  --accent: #d0126c; --accent-soft: #fbe3ee; --ok: #12784f; --ok-soft: #dff3ea; --warn: #a65f00; --warn-soft: #fbefdc; --bad: #c0261b; --bad-soft: #fbe4e1;
+  --paper: #eef0f3; --sheet: #ffffff; --sheet-2: #f6f7f9; --ink: #15171c; --ink-2: #3a3f49; --muted: #646b78;
+  --rule: #dadee5; --rule-2: #c5cad3; --accent: #d0126c; --accent-ink: #9e0d52; --accent-soft: #fdf3f7;
+  --ok: #12784f; --ok-soft: #dff3ea; --ok-ink: #0e5f3f;
+  --warn: #a65f00; --warn-soft: #fbefdc; --warn-ink: #8a4f00; --warn-line: #f0d3a6; --warn-bg: #fffaf2;
+  --bad: #c0261b; --bad-soft: #fbe4e1; --bad-ink: #9c1f16;
   --f-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --f-text: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --r: 10px; --shadow: 0 1px 2px rgba(21,23,28,.06), 0 8px 24px -12px rgba(21,23,28,.18);
+  --r: 14px; --shadow: 0 1px 2px rgba(21,23,28,.06), 0 8px 24px -12px rgba(21,23,28,.18);
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --paper: #101216; --sheet: #191c22; --ink: #eceef2; --ink-2: #c7ccd5; --muted: #949baa; --rule: #2a2f38; --rule-2: #3a404b;
-  --accent: #ff4f9b; --accent-soft: #3a1527; --ok: #4fd09a; --ok-soft: #12291f; --warn: #f0a540; --warn-soft: #33240e; --bad: #ff7b6e; --bad-soft: #3a1714;
+  --paper: #101216; --sheet: #191c22; --sheet-2: #20242b; --ink: #eceef2; --ink-2: #c7ccd5; --muted: #9aa1ae;
+  --rule: #2a2f38; --rule-2: #3a404b; --accent: #ff4f9b; --accent-ink: #ff7ab3; --accent-soft: #3a1527;
+  --ok: #4fd09a; --ok-soft: #12291f; --ok-ink: #6fe0b0; --warn: #f0a540; --warn-soft: #33240e; --warn-ink: #f6bd6b;
+  --warn-line: #5a4320; --warn-bg: #241c10; --bad: #ff7b6e; --bad-soft: #3a1714; --bad-ink: #ff998e;
   --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6); color-scheme: dark } }
 :root[data-theme="dark"] {
-  --paper: #101216; --sheet: #191c22; --ink: #eceef2; --ink-2: #c7ccd5; --muted: #949baa; --rule: #2a2f38; --rule-2: #3a404b;
-  --accent: #ff4f9b; --accent-soft: #3a1527; --ok: #4fd09a; --ok-soft: #12291f; --warn: #f0a540; --warn-soft: #33240e; --bad: #ff7b6e; --bad-soft: #3a1714;
+  --paper: #101216; --sheet: #191c22; --sheet-2: #20242b; --ink: #eceef2; --ink-2: #c7ccd5; --muted: #9aa1ae;
+  --rule: #2a2f38; --rule-2: #3a404b; --accent: #ff4f9b; --accent-ink: #ff7ab3; --accent-soft: #3a1527;
+  --ok: #4fd09a; --ok-soft: #12291f; --ok-ink: #6fe0b0; --warn: #f0a540; --warn-soft: #33240e; --warn-ink: #f6bd6b;
+  --warn-line: #5a4320; --warn-bg: #241c10; --bad: #ff7b6e; --bad-soft: #3a1714; --bad-ink: #ff998e;
   --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6); color-scheme: dark }
 
 * { box-sizing: border-box }
 html { -webkit-text-size-adjust: 100% }
-body { margin: 0; background: var(--paper); color: var(--ink); font: 14px/1.5 var(--f-text); font-feature-settings: "cv11", "ss01" }
-button, input { font: inherit; color: inherit }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 14px/1.5 var(--f-text) }
+button, input, textarea { font: inherit; color: inherit }
+a { color: var(--accent) } a:hover { color: var(--accent-ink) }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
-.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)) }
+.wrap { max-width: 1360px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)) }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
+.mark { width: 22px; height: 22px; flex: none; color: var(--ink) }
 
-/* top bar */
-.bar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule) }
-.bar .wrap { display: flex; align-items: center; gap: 14px; padding-block: 10px; flex-wrap: wrap }
-.mark { display: flex; align-items: center; gap: 10px; font: 700 17px/1 var(--f-display); letter-spacing: -.01em; margin-right: auto; min-width: 0 }
-.mark svg { flex: none }
-.mark .file { font: 500 12px/1 var(--f-mono); color: var(--muted); padding: 5px 8px; border: 1px solid var(--rule); border-radius: 6px; max-width: 34ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-.btn { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 13px; border-radius: 8px; border: 1px solid var(--rule-2); background: var(--sheet); cursor: pointer; font-weight: 500; font-size: 13px; white-space: nowrap }
-.btn:hover { border-color: var(--ink-2) }
-.btn.primary { background: var(--ink); color: var(--sheet); border-color: var(--ink) }
-.btn.primary:hover { background: var(--ink-2) }
-.btn.ghost { border-color: transparent; background: transparent; color: var(--muted) }
-.btn.ghost:hover { color: var(--ink) }
-.btn[disabled] { opacity: .45; pointer-events: none }
-.btn svg { width: 16px; height: 16px }
+/* header */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--sheet); border-bottom: 1px solid var(--rule) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--sheet) }
+.bar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding-block: 12px }
+.brand { display: flex; align-items: center; gap: 10px; font: 700 18px/1 var(--f-display) }
+.filechip { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--sheet-2); min-width: 0; max-width: 420px }
+.filechip img { width: 16px; height: 16px; object-fit: contain; flex: none }
+.filechip .n { font: 12px/1.2 var(--f-mono); color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.filechip .m { font-size: 12px; color: var(--muted); white-space: nowrap }
+.grow { flex: 1 1 0 }
+.lang { display: flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden }
+.lang button { border: 0; padding: 0 12px; min-width: 44px; height: 44px; background: var(--sheet); color: var(--ink-2); font-size: 13px; font-weight: 600; cursor: pointer }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--sheet) }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--rule-2); background: var(--sheet); color: var(--ink); font-weight: 600; cursor: pointer; text-decoration: none; white-space: nowrap }
+.btn:hover { border-color: var(--ink-2); color: var(--ink) }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--sheet) }
+.btn.primary:hover { background: var(--ink-2); color: var(--sheet) }
+.btn svg { width: 16px; height: 16px; flex: none }
+[hidden] { display: none !important }
 
-/* section nav */
-.nav { display: flex; gap: 6px; overflow-x: auto; padding-block: 0 10px; scrollbar-width: none }
-.nav a { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px; color: var(--ink-2); text-decoration: none; font-size: 13px; font-weight: 500; white-space: nowrap; border: 1px solid transparent }
-.nav a:hover { border-color: var(--rule-2) }
-.nav a .n { font: 500 11px/1 var(--f-mono); padding: 3px 6px; border-radius: 999px; background: var(--warn-soft); color: var(--warn) }
-.nav a .n.zero { background: var(--ok-soft); color: var(--ok) }
+/* layout */
+.app { display: grid; grid-template-columns: minmax(300px, 340px) minmax(0, 1fr); gap: 24px; align-items: start; padding-block: 24px 40px }
+.card { background: var(--sheet); border-radius: var(--r); box-shadow: var(--shadow) }
+aside.side { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 92px }
+.specimen { overflow: hidden }
+.proof { height: 240px; display: grid; place-items: center; border-bottom: 1px solid var(--rule); transition: background .2s }
+.proof img { max-width: 62%; max-height: 62% }
+.spec-body { padding: 16px; display: flex; flex-direction: column; gap: 14px }
+.row-sb { display: flex; align-items: center; justify-content: space-between; gap: 10px }
+.lbl { font-size: 13px; color: var(--muted) }
+.swatches { display: flex; gap: 2px }
+.sw { width: 44px; height: 44px; border: 0; padding: 0; background: transparent; border-radius: 10px; display: grid; place-items: center; cursor: pointer }
+.sw span { width: 26px; height: 26px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--rule-2) }
+.sw[aria-pressed="true"] span { box-shadow: 0 0 0 2px var(--sheet), 0 0 0 4px var(--accent) }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink-2) }
+.field input[type=text], .field textarea { min-height: 44px; padding: 10px 12px; border: 1px solid var(--rule-2); border-radius: 8px; font-size: 14px; font-weight: 400; color: var(--ink); background: var(--sheet) }
+.field textarea { resize: vertical; min-height: 84px }
+.colors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+.colorpick { position: relative; display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 12px; color: var(--ink-2); border: 1px solid var(--rule); border-radius: 8px; padding: 6px 8px; cursor: pointer }
+.colorpick input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer }
+.colorpick .chip { width: 28px; height: 28px; border-radius: 6px; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08) }
+.colorpick b { display: block; font-weight: 600 }
+.colorpick code { font: 12px var(--f-mono); color: var(--muted) }
+nav.index { padding: 8px }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted) }
+nav.index .eyebrow { display: block; padding: 10px 10px 6px }
+nav.index a { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 10px; border-radius: 8px; color: var(--ink); text-decoration: none }
+nav.index a:hover { background: var(--sheet-2) }
+nav.index a.warn { background: var(--warn-bg) }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--ok) }
+.dot.warn { background: var(--warn) } .dot.bad { background: var(--bad) }
+nav.index .nm { flex: 1 1 0; font-weight: 500 }
+nav.index .ct { font-size: 12px; font-weight: 600; color: var(--ok-ink) }
+nav.index a.warn .ct { color: var(--warn-ink) }
+.content { display: flex; flex-direction: column; gap: 24px; min-width: 0 }
 
-/* report (verdict) */
-.report { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; padding-block: 24px 8px }
-.panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: var(--r); box-shadow: var(--shadow) }
-.specimen { padding: 18px; display: flex; flex-direction: column; gap: 14px }
-.proof { position: relative; aspect-ratio: 1; border-radius: 6px; display: grid; place-items: center; overflow: hidden; transition: background .2s }
-.proof img { width: 58%; height: 58%; object-fit: contain }
-.proof .crop { position: absolute; width: 22px; height: 22px; border-color: var(--accent); border-style: solid; border-width: 0; opacity: .9 }
-.proof .crop.tl { top: 14px; left: 14px; border-top-width: 1px; border-left-width: 1px }
-.proof .crop.tr { top: 14px; right: 14px; border-top-width: 1px; border-right-width: 1px }
-.proof .crop.bl { bottom: 14px; left: 14px; border-bottom-width: 1px; border-left-width: 1px }
-.proof .crop.br { bottom: 14px; right: 14px; border-bottom-width: 1px; border-right-width: 1px }
-.proof .reg { position: absolute; top: 50%; right: 10px; width: 16px; height: 16px; margin-top: -8px; border: 1px solid var(--accent); border-radius: 50% }
-.proof .reg::before, .proof .reg::after { content: ""; position: absolute; background: var(--accent) }
-.proof .reg::before { left: 50%; top: -5px; bottom: -5px; width: 1px }
-.proof .reg::after { top: 50%; left: -5px; right: -5px; height: 1px }
-.swatches { display: flex; gap: 8px; align-items: center; flex-wrap: wrap }
-.swatches .lbl { font-size: 12px; color: var(--muted); margin-right: 4px }
-.sw { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--rule-2); cursor: pointer; padding: 0 }
-.sw[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 2px }
-.fields { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: end }
-.field { display: flex; flex-direction: column; gap: 5px; min-width: 0 }
-.field span { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted) }
-.field input[type=text] { height: 34px; padding: 0 10px; border: 1px solid var(--rule-2); border-radius: 8px; background: var(--paper); min-width: 0 }
-.field input[type=color] { width: 44px; height: 34px; border: 1px solid var(--rule-2); border-radius: 8px; padding: 3px; background: var(--paper); cursor: pointer }
+/* verdict */
+.verdict { padding: 28px; display: flex; flex-wrap: wrap; gap: 28px; scroll-margin-top: 92px }
+.v-main { flex: 3 1 380px; display: flex; flex-direction: column; gap: 18px; min-width: 0 }
+.v-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px }
+.pill { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 2px 10px; border-radius: 13px; font-size: 12px; font-weight: 600 }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none }
+.pill.ok { background: var(--ok-soft); color: var(--ok-ink) } .pill.warn { background: var(--warn-soft); color: var(--warn-ink) } .pill.bad { background: var(--bad-soft); color: var(--bad-ink) }
+.pill.plain::before { display: none }
+.v-nums { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 32px }
+.v-thumb { display: none; width: 96px; height: 96px; border-radius: 12px; background: var(--sheet-2); place-items: center; flex: none }
+.v-thumb img { max-width: 72%; max-height: 72% }
+.score { display: flex; align-items: baseline; gap: 6px }
+.score b { font: 700 88px/.9 var(--f-display); letter-spacing: -.03em; font-variant-numeric: tabular-nums }
+.score span { font-size: 22px; color: var(--muted) }
+.minsize { display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px }
+.minsize span { font-size: 12px; color: var(--muted) }
+.minsize b { font: 700 34px/1 var(--f-display); font-variant-numeric: tabular-nums }
+.ruler { display: flex; flex-direction: column; gap: 6px }
+.ruler .track { position: relative; height: 10px; border-radius: 5px; background: var(--sheet-2); box-shadow: inset 0 0 0 1px var(--rule) }
+.ruler .below { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px 0 0 5px; background: var(--bad-soft) }
+.ruler .above { position: absolute; right: 0; top: 0; bottom: 0; border-radius: 0 5px 5px 0; background: var(--ok) }
+.ruler .pin { position: absolute; top: -5px; width: 2px; height: 20px; margin-left: -1px; background: var(--ink) }
+.ruler .ticks { position: relative; height: 16px; font: 11px/16px var(--f-mono); color: var(--muted) }
+.ruler .ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap }
+.ruler .ticks span:first-child { transform: none } .ruler .ticks span:last-child { transform: translateX(-100%) }
+.lead { margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink-2); max-width: 62ch; text-wrap: pretty }
+.tocheck { flex: 2 1 280px; display: flex; flex-direction: column; gap: 12px; padding: 20px; border-radius: 12px; background: var(--sheet-2); border: 1px solid var(--rule); min-width: 0 }
+.tocheck h2 { margin: 0; font-size: 15px; font-weight: 600 }
+.tc-item { display: flex; gap: 12px; padding: 14px; border-radius: 10px; background: var(--sheet); border: 1px solid var(--warn-line); text-decoration: none; color: var(--ink) }
+.tc-item:hover { color: var(--ink); border-color: var(--warn) }
+.tc-item.bad { border-color: #f2c6c1 }
+.bang { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--warn-soft); color: var(--warn-ink); display: grid; place-items: center; font-weight: 700 }
+.tc-item.bad .bang { background: var(--bad-soft); color: var(--bad-ink) }
+.tc-item .tx { display: flex; flex-direction: column; gap: 2px; min-width: 0 }
+.tc-item .tx b { font-weight: 600 } .tc-item .tx span { font-size: 13px; color: var(--ink-2) }
+.tc-item .go { font-size: 13px; font-weight: 600; color: var(--accent); margin-top: 4px }
+.passed { display: flex; align-items: center; gap: 10px; padding: 6px 4px 0; font-size: 13px; color: var(--ink-2) }
+.tick { width: 20px; height: 20px; border-radius: 50%; background: var(--ok-soft); color: var(--ok-ink); display: grid; place-items: center; font-size: 12px; font-weight: 700; flex: none }
+.metrics { flex: 1 1 100%; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin: 0 }
+.metrics div { background: var(--sheet); padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0 }
+.metrics dt { font-size: 12px; color: var(--muted) } .metrics dd { margin: 0; font: 500 15px var(--f-mono); font-variant-numeric: tabular-nums }
+.fine { flex: 1 1 100%; margin: 0; font-size: 12px; color: var(--muted) }
+.how summary { cursor: pointer; display: inline; color: var(--accent); font-weight: 600 }
+.how p { margin: 8px 0 0; max-width: 75ch; color: var(--muted) }
 
-.verdict { padding: 24px 26px; display: flex; flex-direction: column; gap: 18px; min-width: 0 }
-.eyebrow { font: 600 11px/1 var(--f-text); letter-spacing: .09em; text-transform: uppercase; color: var(--muted) }
-.headline { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap }
-.big { font: 700 clamp(56px, 7vw, 88px)/.85 var(--f-display); letter-spacing: -.03em; font-variant-numeric: tabular-nums }
-.big small { font-size: .32em; font-weight: 500; color: var(--muted); letter-spacing: 0 }
-.minsize { display: flex; flex-direction: column; gap: 6px }
-.minsize b { font: 700 32px/1 var(--f-display); font-variant-numeric: tabular-nums }
-.pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font: 600 12px/1 var(--f-text) }
-.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50% ; background: currentColor }
-.pill.ok { background: var(--ok-soft); color: var(--ok) } .pill.warn { background: var(--warn-soft); color: var(--warn) } .pill.bad { background: var(--bad-soft); color: var(--bad) } .pill.info { background: var(--paper); color: var(--muted) }
-.lead { font-size: 15.5px; line-height: 1.55; max-width: 62ch; margin: 0; text-wrap: pretty }
-.ruler { position: relative; height: 54px; margin-top: 4px }
-.ruler .track { position: absolute; left: 0; right: 0; top: 18px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--bad-soft), var(--warn-soft) 45%, var(--ok-soft)); border: 1px solid var(--rule) }
-.ruler .zone { position: absolute; top: 18px; height: 10px; border-radius: 5px; background: var(--ok); opacity: .9 }
-.ruler .tick { position: absolute; top: 32px; transform: translateX(-50%); font: 500 11px/1 var(--f-mono); color: var(--muted) }
-.ruler .tick::before { content: ""; position: absolute; left: 50%; top: -6px; width: 1px; height: 4px; background: var(--rule-2) }
-.ruler .pin { position: absolute; top: 2px; transform: translateX(-50%); font: 600 11px/1 var(--f-mono); color: var(--accent); white-space: nowrap }
-.ruler .pin.start { transform: none } .ruler .pin.start::after { left: 0 }
-.ruler .pin::after { content: ""; position: absolute; left: 50%; top: 14px; width: 2px; height: 16px; margin-left: -1px; background: var(--accent) }
-.measures { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
-.measure { border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0 }
-.measure.limit { border-color: var(--accent); background: var(--accent-soft) }
-.measure .v { font: 600 22px/1.1 var(--f-display); font-variant-numeric: tabular-nums }
-.measure .s { font-size: 12px; color: var(--muted) }
-.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--rule); margin: 0 }
-.stats div { padding: 10px 0; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 2px; padding-right: 10px }
-.stats dt { font-size: 12px; color: var(--muted) } .stats dd { margin: 0; font: 500 14px/1.3 var(--f-mono); font-variant-numeric: tabular-nums }
-.fine { font-size: 12px; color: var(--muted); margin: 0 }
-.pdfopts { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--rule); padding-top: 14px }
-.check { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--ink-2); cursor: pointer }
-.check input { margin-top: 3px; accent-color: var(--accent) }
-.field textarea { padding: 8px 10px; border: 1px solid var(--rule-2); border-radius: 8px; background: var(--paper); font: inherit; resize: vertical; min-height: 56px }
-details.how { border-top: 1px solid var(--rule); padding-top: 10px }
-details.how summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink-2) }
-details.how p { font-size: 13px; color: var(--muted); margin: 8px 0 0; max-width: 70ch }
+/* filter */
+.filterbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; justify-content: space-between }
+.seg { display: inline-flex; padding: 4px; border-radius: 12px; background: var(--sheet); border: 1px solid var(--rule) }
+.seg button { min-height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-2); font-weight: 600; cursor: pointer }
+.seg button[aria-selected="true"], .seg button[aria-pressed="true"] { background: var(--ink); color: var(--sheet) }
+.seg.small { padding: 2px; border-radius: 8px } .seg.small button { min-height: 36px; padding: 0 10px; font-size: 12px; border-radius: 6px }
+.hint { font-size: 13px; color: var(--muted) }
+.chips { display: none }
 
-/* drop state */
-.drop { display: grid; place-items: center; text-align: center; gap: 14px; padding: 56px 24px; border: 1.5px dashed var(--rule-2); border-radius: var(--r); background: var(--sheet); margin-block: 24px }
-.drop h1 { font: 700 30px/1.1 var(--f-display); letter-spacing: -.02em; margin: 0; text-wrap: balance }
-.drop p { margin: 0; color: var(--muted); max-width: 52ch }
-.drop .row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center }
-body.dragging .drop, body.dragging .report { outline: 2px dashed var(--accent); outline-offset: 6px }
+/* sections */
+.section { scroll-margin-top: 92px }
+.section > .sh { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--rule) }
+.section h2 { margin: 0; font: 700 22px/1.2 var(--f-display) }
+.section .intro { flex: 1 1 200px; font-size: 13px; color: var(--muted) }
+.section .body { padding: 24px; display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: 20px }
+.fold { width: 100%; text-align: left; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 18px 24px; min-height: 64px; border: 1px solid var(--rule); border-radius: var(--r); background: var(--sheet); color: var(--ink); cursor: pointer; scroll-margin-top: 92px }
+.fold:hover { border-color: var(--rule-2) }
+.fold .t { font: 700 20px/1.2 var(--f-display) }
+.fold .list { flex: 1 1 240px; font-size: 13px; color: var(--muted) }
+.fold .open { font-size: 13px; font-weight: 600; color: var(--accent) }
+.closebar { display: flex; justify-content: flex-end; padding: 0 24px 20px }
+.linkbtn { border: 0; background: none; color: var(--accent); font-weight: 600; cursor: pointer; min-height: 44px; padding: 0 4px }
 
 /* tests */
-.section { padding-block: 28px 4px; scroll-margin-top: 110px }
-.section-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 14px }
-.section-head h2 { font: 700 22px/1.2 var(--f-display); letter-spacing: -.015em; margin: 0 }
-.section-head p { margin: 0; color: var(--muted); max-width: 70ch }
-.tests { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 16px }
-.test { background: var(--sheet); border: 1px solid var(--rule); border-radius: var(--r); display: flex; flex-direction: column; min-width: 0 }
-.test.wide { grid-column: 1 / -1 }
-.test header { display: flex; align-items: center; gap: 10px; padding: 12px 14px 10px; min-height: 52px }
-.test h3 { font: 600 14px/1.3 var(--f-text); margin: 0; margin-right: auto }
-.seg { display: inline-flex; padding: 2px; border-radius: 7px; background: var(--paper); border: 1px solid var(--rule) }
-.seg button { border: 0; background: transparent; padding: 4px 9px; border-radius: 5px; font-size: 12px; color: var(--muted); cursor: pointer; white-space: nowrap }
-.seg button[aria-pressed="true"] { background: var(--sheet); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12) }
-.stage { margin: 0 14px; border-radius: 6px; overflow: hidden; background: #fff; border: 1px solid var(--rule); line-height: 0 }
+.test { display: flex; flex-direction: column; gap: 10px; min-width: 0; scroll-margin-top: 92px }
+.test.wide, .test.flag { grid-column: 1 / -1 }
+.test.flag { padding: 20px; border-radius: 12px; border: 1px solid var(--warn-line); background: var(--warn-bg) }
+.test.flag.bad { border-color: #f2c6c1; background: #fdf6f5 }
+:root[data-theme="dark"] .test.flag.bad { background: #2a1513; border-color: #5a2722 }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .test.flag.bad { background: #2a1513; border-color: #5a2722 } }
+.test .th { display: flex; flex-wrap: wrap; align-items: center; gap: 10px }
+.test h3 { margin: 0; font-size: 15px; font-weight: 600; margin-right: auto }
+.test.flag h3 { font-size: 16px }
+.stage { border-radius: 10px; overflow: hidden; background: var(--sheet-2); border: 1px solid var(--rule); line-height: 0 }
 .stage canvas { width: 100%; height: auto; display: block }
-.test footer { padding: 10px 14px 14px; display: flex; flex-direction: column; gap: 8px }
-.readout { display: flex; gap: 8px; align-items: center; flex-wrap: wrap }
-.chip { font: 500 12px/1 var(--f-mono); padding: 5px 8px; border-radius: 6px; background: var(--paper); color: var(--ink-2); font-variant-numeric: tabular-nums }
-.test .note { font-size: 12.5px; color: var(--muted); margin: 0; text-wrap: pretty }
-.slider { display: flex; align-items: center; gap: 10px; padding: 10px 14px 0 }
-.slider input { flex: 1; accent-color: var(--accent) }
-.slider output { font: 500 12px/1 var(--f-mono); color: var(--ink-2); white-space: nowrap; text-align: right }
-.slider { flex-wrap: wrap }
-.slider input { min-width: 140px }
-pre.src { margin: 0 14px; max-height: 300px; overflow: auto; padding: 12px; border-radius: 6px; background: var(--paper); border: 1px solid var(--rule); font: 12px/1.55 var(--f-mono); white-space: pre-wrap; word-break: break-all; color: var(--ink-2) }
-.kit { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px }
-footer.page { padding-block: 36px 48px; color: var(--muted); font-size: 12px }
-.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--ink); color: var(--sheet); padding: 10px 14px; border-radius: 8px; font-size: 13px; transition: .25s; pointer-events: none; z-index: 50 }
+.test .note { margin: 0; font-size: 13px; color: var(--muted); text-wrap: pretty }
+.readout { display: flex; flex-wrap: wrap; gap: 6px }
+.chip { font: 500 12px/1 var(--f-mono); padding: 6px 8px; border-radius: 6px; background: var(--sheet-2); color: var(--ink-2); font-variant-numeric: tabular-nums }
+.whatfix { display: flex; flex-wrap: wrap; gap: 6px 24px; font-size: 14px; color: var(--ink-2) }
+.whatfix strong { color: var(--ink) }
+.slider { display: flex; flex-wrap: wrap; align-items: center; gap: 10px }
+.slider input { flex: 1 1 160px; min-height: 44px; accent-color: var(--accent) }
+.slider output { font: 500 12px var(--f-mono); color: var(--ink-2); white-space: nowrap }
+pre.src { margin: 0; max-height: 300px; overflow: auto; padding: 12px; border-radius: 10px; background: var(--sheet-2); border: 1px solid var(--rule); font: 12px/1.55 var(--f-mono); white-space: pre-wrap; word-break: break-all; color: var(--ink-2) }
+.kit { display: flex; flex-wrap: wrap; gap: 8px }
+footer.page { padding: 8px 0 24px; font-size: 12px; color: var(--muted) }
+
+/* empty state */
+.empty { max-width: 1040px; margin: 0 auto; padding-block: 56px 48px; display: flex; flex-direction: column; gap: 32px }
+.empty .hero { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center }
+.empty h1 { margin: 0; font: 700 44px/1.05 var(--f-display); letter-spacing: -.02em; text-wrap: balance }
+.empty .hero p { margin: 0; font-size: 17px; color: var(--ink-2); max-width: 620px }
+.drop { position: relative; display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 56px 24px; border: 2px dashed var(--rule-2); border-radius: 18px; background: var(--sheet); text-align: center; cursor: pointer }
+.drop:hover, body.dragging .drop { border-color: var(--accent) }
+.drop .ic { width: 72px; height: 72px; border-radius: 18px; background: var(--accent-soft); display: grid; place-items: center; color: var(--accent) }
+.drop .ic svg { width: 32px; height: 32px }
+.drop .big { font: 700 24px/1.2 var(--f-display) }
+.drop .sm { font-size: 14px; color: var(--muted) }
+.drop .fake { min-height: 48px; padding: 0 22px; border-radius: 10px; background: var(--ink); color: var(--sheet); font-weight: 600; display: inline-flex; align-items: center; gap: 8px }
+.drop .fake svg { width: 18px; height: 18px; flex: none } .drop .fake { white-space: nowrap }
+.drop input { position: absolute; width: 1px; height: 1px; opacity: 0 }
+.drop:focus-within { outline: 2px solid var(--accent); outline-offset: 2px }
+.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px }
+.three div { padding: 20px; border-radius: var(--r); background: var(--sheet); display: flex; flex-direction: column; gap: 6px }
+.three b { font-size: 15px } .three span { font-size: 13px; color: var(--ink-2) }
+
+/* export panel */
+.ex-back { position: fixed; inset: 0; z-index: 60; display: flex; background: rgba(17,19,23,.82) }
+.ex-back[hidden] { display: none }
+.ex-prev { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 40px; min-width: 0; overflow: hidden }
+.ex-prev .eyebrow { color: #c7ccd5 }
+.page1 { width: 440px; max-width: 100%; aspect-ratio: 210 / 297; background: #ffffff; color: #15171c; border-radius: 4px; box-shadow: 0 24px 60px -20px rgba(0,0,0,.6); padding: 32px; display: flex; flex-direction: column; gap: 16px; overflow: hidden; font-size: 11px }
+.page1 .ph { display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #646b78; gap: 10px }
+.page1 .ph b { color: #15171c }
+.page1 .pt { display: flex; align-items: center; gap: 14px }
+.page1 .pt img { width: 64px; height: 64px; object-fit: contain; flex: none }
+.page1 .pt b { display: block; font: 700 22px/1.1 var(--f-display) }
+.page1 .pt span { font-size: 11px; color: #646b78 }
+.page1 .pv { padding: 14px; border-radius: 8px; background: #f6f7f9; display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap }
+.page1 .pv .s { font: 700 40px/1 var(--f-display) } .page1 .pv small { color: #646b78 }
+.page1 .pn { padding: 10px 12px; border-left: 3px solid #d0126c; background: #fdf3f7; font-size: 10px; color: #3a3f49 }
+.page1 .pm { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid #e3e6eb; border-radius: 6px; overflow: hidden }
+.page1 .pm div { padding: 7px 8px; display: flex; flex-direction: column; gap: 2px; font-size: 8px; color: #646b78; border-right: 1px solid #e3e6eb; border-bottom: 1px solid #e3e6eb }
+.page1 .pm div.hi { background: #fdf3f2 } .page1 .pm b { font: 600 10px/1.2 var(--f-mono); color: #15171c }
+.page1 .pk { display: flex; flex-direction: column; gap: 6px } .page1 .pk > b { font-size: 11px }
+.page1 .pk div { padding: 7px 10px; border: 1px solid #f1d3b0; background: #fff8ef; border-radius: 6px; font-size: 9px; color: #3a3f49 } .page1 .pk div b { color: #15171c }
+.page1 .pg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px }
+.page1 .pg img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; background: #f6f7f9 }
+.ex-panel { width: 480px; max-width: 100%; flex: none; background: var(--sheet); display: flex; flex-direction: column; box-shadow: -12px 0 40px rgba(0,0,0,.25) }
+.ex-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--rule) }
+.ex-head h2 { margin: 0; font: 700 24px/1.2 var(--f-display) }
+.iconbtn { width: 44px; height: 44px; border: 0; border-radius: 10px; background: transparent; color: var(--ink-2); display: grid; place-items: center; cursor: pointer }
+.iconbtn:hover { background: var(--sheet-2) }
+.ex-body { flex: 1 1 0; overflow: auto; padding: 24px; display: flex; flex-direction: column; gap: 22px }
+.radio2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+.radio2 button { text-align: left; padding: 14px; min-height: 44px; border-radius: 12px; border: 1px solid var(--rule); background: var(--sheet); display: flex; flex-direction: column; gap: 4px; cursor: pointer; color: var(--ink) }
+.radio2 button[aria-checked="true"] { border: 2px solid var(--accent); background: var(--accent-soft); padding: 13px }
+.radio2 b { font-weight: 600 } .radio2 span { font-size: 12px; color: var(--ink-2) }
+.inc { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none }
+.inc li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink) }
+.inc li.off { color: var(--muted) }
+.inc .bx { width: 18px; height: 18px; border-radius: 5px; background: var(--ink); color: var(--sheet); font-size: 11px; display: grid; place-items: center; flex: none }
+.inc li.off .bx { background: var(--rule) }
+.kitrow { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; background: var(--sheet-2) }
+.kitrow span { flex: 1 1 160px; font-size: 13px; color: var(--ink-2) }
+.ex-foot { padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); display: flex; align-items: center; gap: 12px }
+.ex-foot span { flex: 1 1 0; font-size: 12px; color: var(--muted) }
+.ex-foot .btn { min-height: 48px }
+
+/* mobile bar */
+.mbar { display: none }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--ink); color: var(--sheet); padding: 10px 14px; border-radius: 8px; font-size: 13px; transition: .25s; pointer-events: none; z-index: 80 }
 .toast.on { opacity: 1; transform: translateX(-50%) }
 
-@media (max-width: 1080px) { .tests { --cols: 2 !important } }
-@media (max-width: 980px) { .report { grid-template-columns: 1fr } .proof { max-height: 420px; aspect-ratio: auto; height: 340px } }
-@media (max-width: 720px) { .tests { --cols: 1 !important } .test.wide { grid-column: auto } .measures { grid-template-columns: 1fr } .stats { grid-template-columns: 1fr 1fr } .fields { grid-template-columns: 1fr 1fr } .fields .field:first-child { grid-column: 1 / -1 } .mark .file { display: none } }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+@media (max-width: 1100px) { .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)) } }
+@media (max-width: 980px) {
+  .app { grid-template-columns: minmax(0, 1fr) } aside.side { position: static; order: 2 } .content { order: 1 }
+  .ex-prev { display: none } .ex-panel { margin-left: auto }
+}
+@media (max-width: 720px) {
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+  .bar .wrap { gap: 8px; padding-block: 8px; flex-wrap: nowrap }
+  .bar .filechip { flex: 1 1 0; border: 0; background: none; padding: 0 } .filechip .m, .filechip img { display: none }
+  .bar .grow, .bar .act { display: none }
+  .lang button { padding: 0 8px; min-width: 40px }
+  .app { padding-block: 16px 104px; gap: 14px } .content { gap: 14px }
+  nav.index { display: none }
+  .verdict { padding: 18px; gap: 14px } .v-thumb { display: grid } .v-nums { gap: 16px; align-items: center }
+  .score b { font-size: 52px } .score span { font-size: 15px } .minsize b { font-size: 24px }
+  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .filterbar .hint { display: none }
+  .chips { display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none }
+  .chips a { flex: none; min-height: 40px; padding: 0 14px; border-radius: 20px; background: var(--sheet); border: 1px solid var(--rule); color: var(--ink); font-weight: 600; font-size: 13px; display: flex; align-items: center; text-decoration: none }
+  .chips a.on { background: var(--ink); color: var(--sheet); border-color: var(--ink) }
+  .section > .sh, .section .body { padding: 16px } .section .body { --cols: 1 !important } .test.wide, .test.flag { grid-column: auto }
+  .fold { padding: 14px 16px } .fold .list { display: none }
+  .three { grid-template-columns: 1fr } .empty h1 { font-size: 32px } .empty { padding-block: 32px }
+  .mbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; gap: 10px; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: var(--sheet); border-top: 1px solid var(--rule) }
+  .mbar .btn { flex: 1 1 0; min-height: 48px } .mbar .btn.primary { flex: 1.4 1 0 }
+  .mbar[hidden] { display: none }
+  .ex-panel { width: 100% } .radio2 { grid-template-columns: 1fr }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important } }
+html { scroll-behavior: smooth }
 </style>
 </head>
 <body>
-<div class="bar">
+<header class="bar">
   <div class="wrap">
-    <div class="mark">
-      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 0v6M11 16v6M0 11h6M16 11h6" stroke="var(--accent)" stroke-width="1.6"/></svg>
-      <span>Logo Lab</span><span class="file" id="fname"></span>
-    </div>
-    <button class="btn ghost" id="lang" type="button" aria-label="Language">IT</button>
-    <label class="btn" for="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 20h16"/></svg><span data-t="open"></span></label>
-    <input type="file" id="open" accept=".svg,.png,image/svg+xml,image/png" hidden>
-    <button class="btn primary" id="pdf" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4v12m0 0 4-4m-4 4-4-4M4 20h16"/></svg><span data-t="pdf"></span></button>
+    <div class="brand"><svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="12.5" fill="none" stroke="currentColor" stroke-width="4.5"/><rect x="21.75" y="1" width="4.5" height="7.5" rx="1" fill="currentColor"/><rect x="21.75" y="39.5" width="4.5" height="7.5" rx="1" fill="currentColor"/><rect x="1" y="21.75" width="7.5" height="4.5" rx="1" fill="currentColor"/><rect x="39.5" y="21.75" width="7.5" height="4.5" rx="1" fill="currentColor"/><circle cx="24" cy="24" r="4" fill="var(--accent)"/></svg><span>Logo Lab</span></div>
+    <div class="filechip" id="filechip" hidden><img alt=""><span class="n"></span><span class="m"></span></div>
+    <div class="grow"></div>
+    <div class="lang" role="group" id="langgroup"><button type="button" data-lang="it">IT</button><button type="button" data-lang="en">EN</button></div>
+    <label class="btn act" for="open" id="changeBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 20h16"/></svg><span data-t="change"></span></label>
+    <button type="button" class="btn primary act" id="exportBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 4v12m0 0 4-4m-4 4-4-4M4 20h16"/></svg><span data-t="export"></span></button>
   </div>
-  <div class="wrap"><nav class="nav" id="nav"></nav></div>
-</div>
-<main class="wrap" id="main"></main>
-<div class="wrap"><footer class="page" id="foot"></footer></div>
-<div class="toast" id="toast" role="status"></div>
+</header>
+<input type="file" id="open" accept=".svg,.png,image/svg+xml,image/png" class="sr" tabindex="-1" aria-hidden="true">
+<div id="main"></div>
+<div class="mbar" id="mbar" hidden><label class="btn" for="open" data-t="change"></label><button type="button" class="btn primary" id="exportBtn2" data-t="export"></button></div>
+<div class="ex-back" id="exback" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 /*__DATA__*/
 "use strict";
@@ -189,33 +321,45 @@ if (!window.DATA) window.DATA = null;
 // ---------------- i18n ----------------
 const I18N = {
   en: {
-    open: 'Open logo', pdf: 'Download PDF', brand: 'Brand name', color: 'Brand colour', ink: 'One-colour ink', bg: 'Background',
-    dropTitle: 'Drop a logo to stress-test it', dropSub: 'SVG works best; a PNG with a transparent background works too. Everything runs in this page: nothing is uploaded.', choose: 'Choose a file', sample: 'Try the sample mark', sampleTag: 'sample mark',
-    scal: 'Scalability', minSize: 'Minimum size', thin: 'Thinnest stroke', gap: 'Narrowest gap', ofMark: 'of the mark', limiting: 'limiting factor', fine: 'not limiting',
-    fid16: 'Fidelity at 16 px', fid32: 'Fidelity at 32 px', parts: 'Parts, full → 32 px', fill: 'Fill ratio', sym: 'Mirror symmetry', neg: 'Negative space', counters: 'counters', counter: 'counter',
-    heur: 'Pixel measurements. They flag reproduction risks, not the quality of the idea.',
+    change: 'Change logo', export: 'Export report', langLabel: 'Language', colors: '{n} colours', color1: '1 colour',
+    bg: 'Preview background', bgWhite: 'White', bgPaper: 'Light grey', bgInk: 'Black', bgBrand: 'Brand colour',
+    brand: 'Brand name', color: 'Brand colour', ink: 'One colour', sampleTag: 'sample mark', index: 'Test index', verdictNav: 'Verdict',
+    eHead: 'Stress-test it before the client sees it.', eSub: 'Over 20 tests of size, form, context and print on your logo, with a minimum size and a PDF report.',
+    eDrop: 'Drop your logo here', eDropSub: 'SVG recommended · a PNG with a transparent background works too · or paste from Figma or Illustrator (Ctrl+V)',
+    choose: 'Choose a file', sample: 'No file to hand? Try the sample mark →',
+    e1h: 'No upload', e1p: 'Everything runs in this page. The file never leaves your computer: fine for work under NDA.',
+    e2h: 'Measurements, not taste', e2p: 'The thinnest stroke and the narrowest gap, converted into the smallest size at which they hold.',
+    e3h: 'A report ready to send', e3p: 'A PDF with your studio’s name, and a client version without the score.',
+    verdictLabel: 'Verdict · scalability', minSize: 'Minimum size', toCheck: 'To check', ofTests: '{n} of {t} tests', goTest: 'Go to the test →',
+    passedAll: 'All {n} tests passed', passedSome: '{n} tests passed: {list}',
+    thin: 'Thinnest stroke', gap: 'Narrowest gap', ofMark: 'of the mark', limiting: 'limiting',
+    fid16: 'Fidelity at 16 px', fid32: 'Fidelity at 32 px', parts: 'Parts 512 → 32 px', fill: 'Fill ratio', sym: 'Symmetry', neg: 'Negative space', counters: 'counters', counter: 'counter',
+    heur: 'Pixel measurements: they flag reproduction risks, not the quality of the idea.',
+    howT: 'How the score works', howP: 'Logo Lab measures two things on the mark itself: the thinnest stroke and the narrowest gap, on a 512 px render, and checks whether parts break apart or merge as they thin out. From those it works out the smallest size at which both stay at least 1 px wide. The score is only that size on a scale where 16 px is 10 and 256 px is 0: no taste and no style preference. The measurement matches shapes of known thickness to within half a pixel and was run on about 380 real marks, from app icons to coats of arms. A detailed mark can be right for its use: a crest on a wine label does not need to work at 16 px.',
     twoTone: 'Two-tone mark: measured on the silhouette ({a}) and on the internal shapes ({b}); the lower one counts.',
-    vOk: 'The thinnest strokes and gaps stay above 1 px down to 16 px. Judge the idea and the drawing: scalability is not the issue.',
+    vOk: 'The thinnest strokes and gaps stay above 1 px down to 16 px. Scalability is not the issue: judge the idea and the drawing.',
     vStroke: 'Limited by thin strokes. Part of the ink is thinner than {p} of the mark, so below about {s} px it falls under 1 px and starts to break up. A heavier small-size version is the usual fix.',
     vGap: 'Limited by tight gaps. Spaces narrower than {p} of the mark close up below about {s} px and shapes merge. Open the gaps, or use a small-size version with fewer cuts.',
     s16: 'Holds at 16 px', s24: 'Good from 24 px', s32: 'Good from 32 px', s64: 'Needs a small-size version', sBig: 'Too detailed for small sizes',
-    belowMin: 'below minimum', light: 'Light', dark: 'Dark', gridOn: 'Grid', gridOff: 'No grid', onBrand: 'On brand colour', tonal: 'Tonal',
-    paper: 'Paper', kraft: 'Kraft', concrete: 'Concrete', chalk: 'Chalk', metal: 'Metal', emboss: 'Emboss', deboss: 'Deboss', copy: 'Copy SVG', copied: 'Copied',
-    secLeg: 'Size & legibility', secLegP: 'Where the mark stops working as it gets smaller or blurrier.',
+    fAll: 'All tests · {n}', fWarn: 'To check · {n}', fHint: 'Sections where everything passes are folded: open them only if you need them.',
+    okCount: '{a}/{b} ok', warnCount: '{n} to check', open: 'Open ↓', closeSec: 'Close ↑', okPill: 'ok', checkPill: 'Check', what: 'What happens:', fix: 'How to fix it:',
+    secLeg: 'Size & legibility', secLegP: 'Where the mark stops working as it gets smaller or blurrier.', secLegS: 'Size',
     secForm: 'Form', secFormP: 'How the shapes, counters and mass are built.',
-    secCtx: 'In context', secCtxP: 'The mark where it will actually live.',
-    secRep: 'Reproduction', secRepP: 'One ink, materials and print processes.',
+    secCtx: 'In context', secCtxP: 'The mark where it will actually live.', secCtxS: 'Context',
+    secRep: 'Reproduction', secRepP: 'One colour, materials and print processes.',
     secFile: 'File & export', secFileP: 'The file as delivered, and a PNG kit rendered here.',
-    tScale: 'Scale ladder', nScale: 'Crisp renders from 128 to 16 px. Sizes below the minimum are marked.',
-    tPix: 'Real pixels', nPix: '16, 32 and 48 px renders enlarged without smoothing: what a browser tab or toolbar shows.',
-    tBlur: 'Vision blur', nBlur: 'Loss of sharpness from distance, low vision or motion. A strong mark keeps its silhouette after the details are gone.',
-    blur: ['Clear: normal vision', 'Soft: mild impairment', 'Blurred: low vision', 'Heavy: severe impairment', 'Silhouette only'],
+    footer: 'Logo Lab runs entirely in this page: the logo is not uploaded anywhere.',
+    // test titles and notes
+    tScale: 'Scale', nScale: 'Crisp renders from 128 to 16 px. Sizes below the minimum are marked.',
+    tPix: 'Real pixels', nPix: '16, 32 and 48 px enlarged without smoothing, as in a browser tab or a toolbar.',
+    tBlur: 'Blur', nBlur: 'Loss of sharpness from distance, low vision or motion. A strong mark keeps its silhouette after the details are gone.',
+    blur: ['Sharp: normal vision', 'Soft: mild impairment', 'Blurred: low vision', 'Heavy: severe impairment', 'Silhouette only'],
     tNeg: 'Negative space', nNeg: 'Ink in black, enclosed counters in colour. Small counters close first; an intended negative-space idea should still read here.',
     tWeight: 'Visual weight', nWeight: 'Where the mass sits. The cross is the centre of mass, the ring the geometric centre: a large gap looks off-centre in a square crop.',
     tClear: 'Clear space', nClear: 'A proposed exclusion zone. Tie the unit to an element of the mark (the x-height, the stroke) and use it in the guidelines.', unit: 'Unit {u}% of the height',
-    tIcon: 'App icon keylines', nIcon: 'The mark on an app tile over a generic keyline grid. Check optical size and centring on white, brand and dark tiles.',
-    tCurv: 'Curvature combs', nCurv: 'Spikes show how tight each curve is. A smooth comb means a smooth curve; red jumps are kinks that read as wobble at large sizes.', kinks: '{n} curvature jumps',
-    tAnch: 'Anchor points & handles', nAnch: 'Anchors (squares) and Bézier handles (circles). Look for redundant points and handles off the horizontal/vertical at extremes.', anch: '{a} anchors · {h} handles · {o} off-axis',
+    tIcon: 'App icon grid', nIcon: 'The mark on an app tile over a generic keyline grid. Check optical size and centring on white, brand and dark tiles.',
+    tCurv: 'Curvature', nCurv: 'Spikes show how tight each curve is. A smooth comb means a smooth curve; red jumps are kinks that read as wobble at large sizes.', kinks: '{n} curvature jumps',
+    tAnch: 'Anchor points', nAnch: 'Anchors (squares) and Bézier handles (circles). Look for redundant points and handles off the horizontal/vertical at extremes.', anch: '{a} anchors · {h} handles · {o} off-axis',
     tTabs: 'Favicon in tabs', nTabs: 'The real 16 px favicon in light and dark browser tabs. Is it recognisable at a glance?',
     tType: 'Type lockups', nType: 'The mark beside the name in six type directions. Which voice does the symbol already have?',
     tCard: 'Business card & badge', nCard: 'An 85 × 55 mm card and an ID badge, at matching proportions.',
@@ -223,82 +367,165 @@ const I18N = {
     tBill: 'Billboard', nBill: 'Large, at an angle, seen from a distance. Is the silhouette still clear in perspective?',
     tPat: 'Pattern', nPat: 'The mark repeated as a pattern. Strong marks often make good patterns; awkward gaps show here.',
     tWm: 'Watermark', nWm: 'A low-opacity repeat over imagery, as on previews and documents.',
-    tMono: 'One colour & reversed', nMono: 'A mechanical recolour in one ink and reversed. If the idea disappears, the mark needs a designed one-colour version.', monoWarn: 'overlapping colours merge',
+    tMono: 'One colour & reversed', nMono: 'A mechanical recolour in one ink and reversed. If the idea disappears, the mark needs a designed one-colour version.', monoWarn: 'Overlapping colours merge',
     tMat: 'Materials', nMat: 'Uncoated paper, kraft, concrete, chalkboard and brushed metal. Watch thin parts and low-contrast colours.',
     tEmb: 'Emboss & deboss', nEmb: 'Blind emboss or deboss with no colour: only the shape and its edges carry the mark.',
     tHalf: 'Halftone', nHalf: 'A coarse dot screen, as in newsprint, screen printing and low-resolution reproduction.',
-    tPatch: 'Embroidered patch', nPatch: 'Thread-like rendering on a round patch. Fine lines and small counters fail first: embroidery needs about 1 mm minimum.',
-    tSrc: 'SVG source', nSrc: 'The file as delivered. Look for live text, embedded images, editor metadata and empty groups.', live: 'live text', noLive: 'no live text', img: 'embedded image', noImg: 'no images',
-    tKit: 'PNG kit', nKit: 'Transparent PNGs of the mark, plus favicon and app-icon sizes on a white tile.', all: 'Download all',
+    tPatch: 'Embroidery', nPatch: 'Thread-like rendering on a round patch. Fine lines and small counters fail first: embroidery needs about 1 mm minimum.',
+    tSrc: 'SVG source', nSrc: 'The file as delivered. Look for live text, embedded images, editor metadata and empty groups.', live: 'live text', noLive: 'no live text', img: 'embedded image', noImg: 'no embedded images', copy: 'Copy SVG', copied: 'Copied',
+    tKit: 'PNG kit', nKit: 'Transparent PNGs of the mark from 16 to 1024 px, plus apple-touch-icon, 192 and 512 on a white tile.', zip: 'Download .zip',
+    belowMin: 'below minimum', light: 'Light', dark: 'Dark', gridOn: 'Grid', gridOff: 'No grid', onBrand: 'On brand colour', tonal: 'Tonal',
+    paper: 'Paper', kraft: 'Kraft', concrete: 'Concrete', chalk: 'Chalk', metal: 'Metal', emboss: 'Emboss', deboss: 'Deboss',
     offset: 'mass offset {x}% x · {y}% y', name: 'Name Surname', role: 'Visitor',
-    pdfOpts: 'PDF report', studio: 'Studio on the report', studioPh: 'Your studio name', clientV: 'Client version: hide the score and the technical tests', noteL: 'Note for the client', notePh: 'Optional: what you want the client to take from this report', prepared: 'Prepared by {s}', noteH: 'Designer’s note',
-    howT: 'How the score works', howP: 'Logo Lab measures two things on the mark itself: the thinnest stroke and the narrowest gap, on a 512 px render, and checks whether parts break apart or merge as they thin out. From those it works out the smallest size at which both stay at least 1 px wide. The score is only that size on a scale where 16 px is 10 and 256 px is 0: no taste and no style preference. The measurement matches shapes of known thickness to within half a pixel and was run on about 380 real marks, from app icons to coats of arms. A detailed mark can be right for its use: a crest on a wine label does not need to work at 16 px.',
-    pdfTitle: 'Logo test report', pdfGen: 'Generated with Logo Lab (brandsmith) on {d}', pdfPage: 'Page {n}', pdfMade: 'PDF downloaded', pdfFile: 'File',
+    // warnings: what happens / how to fix
+    wSizeW: 'Below {s} px the thinnest {f} fall under 1 px: the mark breaks up or closes in favicons, app icons and avatars.', wSizeF: 'Draw a small-size version (heavier strokes, fewer cuts) for everything below {s} px.',
+    wPixW: 'On the real pixel grid of a browser tab (16 and 32 px) the finest details blur into grey or vanish.', wPixF: 'Check the small-size version on these same grids; below {s} px fit its strokes to whole pixels.',
+    fStrokes: 'strokes', fGaps: 'gaps',
+    wWeightW: 'The centre of mass is {d}% off the centre: in a square crop (avatar, app icon) the mark looks off-centre.', wWeightF: 'In square formats, centre the mass optically, not the bounding box.',
+    wCurvW: '{n} sudden changes of curvature: at large sizes they read as wobbles or kinks.', wCurvF: 'Redraw those curves with fewer points and continuous handles.',
+    wMonoW: 'Recoloured in one ink, the overlapping colours merge and the idea disappears.', wMonoF: 'Draw a one-colour version with the inner shape knocked out (cut, not painted).',
+    wSrcW: 'The file contains live text or an embedded image: it won’t look the same everywhere and can’t be scaled.', wSrcF: 'Outline the text and replace images with vector paths before delivery.',
+    // export panel
+    exTitle: 'Export report', close: 'Close', forWho: 'Who is it for', forMe: 'For me / the studio', forMeP: 'Score, metrics and every technical test.',
+    forClient: 'For the client', forClientP: 'No score: minimum size, contexts and your note.', studio: 'Studio name on the report', studioPh: 'Your studio name',
+    noteL: 'Note for the client', notePh: 'Optional: what you want the client to take away', includes: 'What’s included',
+    incVerdict: 'Verdict and minimum size', incScore: 'Score and metrics', incCtx: 'Contexts: favicon, card, billboard, photo', incTech: 'Technical tests: curvature, anchors, SVG source', incNote: 'Note for the client',
+    kitRow: 'PNG kit: 16–1024 px, apple-touch-icon, 192 and 512', pagesInfo: 'A4 · {n} pages · generated locally', dlPdf: 'Download PDF', dlPdfClient: 'Download PDF for the client',
+    previewOf: 'Preview · page 1 of {n}', subDesigner: 'Technical report · {n} tests', subClient: 'How to use the new mark', pdfMade: 'PDF downloaded', zipMade: 'PNG kit downloaded', usePx: 'Use it no smaller than',
+    // reports
+    rTech: 'Technical brand report', rTested: 'Mark tested', rTests: '{n} tests', rToCheck: 'To check · {n} of {t}', rNone: 'Nothing to check: every test passed.', rPage: 'p. {n}', rNote: 'Designer’s note',
+    rReport: 'Technical report', rLadderOk: 'Crisp renders from 128 to 16 px: the mark holds at every size.', rLadderBad: 'Crisp renders from 128 to 16 px. Below {s} px the thinnest {f} fall under 1 px.',
+    rPixP: 'Enlarged without smoothing: what a browser tab shows.', rPix16: 'At 16 px', rPix16ok: 'the mark is still legible.', rPix16bad: 'details below the minimum close up or disappear.', rPix32: 'At 32 px', rPix32ok: 'the drawing reads as intended.', rPix32bad: 'the finest details are under one pixel.',
+    rBlurP: 'A strong mark keeps its silhouette when the details are gone.', rBlurL: ['Sharp', 'Soft', 'Blurred', 'Silhouette'],
+    rMinTag: '! Minimum {s} px', rOk: 'OK', pdfTitle: 'Logo test report', rCheck: '! Check', rFile: 'SVG file', rFileLine: '{e} elements · {lt} · {im}', rPng: 'PNG file: no source to inspect.',
+    rNext: 'Next steps', nxSmall: 'Small-size version', nxSmallP: '(below {s} px): heavier strokes and fewer cuts, so it stays open at favicon and app-icon sizes.',
+    nxCheck32: 'Check favicon and app icon', nxCheck32P: ': the mark holds from {s} px; look at the 16 px tab before signing off.',
+    nxMono: 'Designed one-colour version', nxMonoP: ': the inner shape knocked out instead of painted.',
+    nxCurv: 'Clean up the curves', nxCurvP: ': {n} sudden changes of curvature to redraw.', nxWeight: 'Optical centring', nxWeightP: ' in square formats (avatar, app icon).',
+    nxSrc: 'Clean master file', nxSrcP: ': outline the text and remove embedded images.', nxRules: 'Usage rules', nxRulesP: ': full mark from {s} px up; the small version for favicon, app icon and avatar.',
+    nxRetest: 'Run the test again on the new versions and attach the reports to the guidelines.',
+    cTitle: 'Your new mark, and how to use it well', cBrief: 'At a glance', cWhich: 'Which version to use',
+    cStrongBig: 'Strong at large sizes', cStrongBigP: 'Signage, print, website, packaging: the mark reads at once.',
+    cFar: 'Recognisable from afar', cFarP: 'The shape stays clear on a billboard or over a photo.',
+    cSmallOk: 'Works small too', cSmallOkP: 'Favicon, app icon and avatar use the same mark.', cSmallNeed: 'A version for small sizes', cSmallNeedP: 'For icons and avatars we prepare a simplified version.',
+    cFull: 'Full mark', cFrom: 'from {s} px up', cFullP: 'Website, print, signage, materials', cFullAll: 'Everywhere, including favicon and app icon',
+    cSmall: 'Small version', cUnder: 'below {s} px', cSmallP: 'Favicon, app icon, avatar · in preparation', cStudioNote: 'Note from the studio',
+    cWhere: 'Where the mark will live', cAvoid: 'Avoid', cCtxCard: 'Business card', cCtxBill: 'Billboard', cCtxKraft: 'Kraft packaging', cCtxPat: 'Brand pattern', cCtxEmb: 'Emboss on paper', cCtxTab: 'Browser tab and app icon',
+    cAvSmall: 'The full mark below {s} px: use the small version.', cAvMono: 'Recolouring it yourself in one colour: ask for the one-colour version.', cAvDistort: 'Squashing or distorting it: the proportions are part of the mark.',
+    cFootQ: 'Unsure about a use? Ask us before printing.', prepared: 'Prepared by {s}', preparedLL: 'Prepared with Logo Lab', genLocal: 'Generated locally with Logo Lab',
   },
   it: {
-    open: 'Apri logo', pdf: 'Scarica PDF', brand: 'Nome del brand', color: 'Colore del brand', ink: 'Inchiostro monocolore', bg: 'Sfondo',
-    dropTitle: 'Trascina qui un logo per metterlo alla prova', dropSub: 'Meglio un SVG; va bene anche un PNG con sfondo trasparente. Tutto gira in questa pagina: nulla viene caricato online.', choose: 'Scegli un file', sample: 'Prova il logo di esempio', sampleTag: 'logo di esempio',
-    scal: 'Scalabilità', minSize: 'Dimensione minima', thin: 'Tratto più sottile', gap: 'Spazio più stretto', ofMark: 'del marchio', limiting: 'fattore limitante', fine: 'non limitante',
-    fid16: 'Fedeltà a 16 px', fid32: 'Fedeltà a 32 px', parts: 'Parti, intero → 32 px', fill: 'Riempimento', sym: 'Simmetria speculare', neg: 'Spazio negativo', counters: 'occhielli', counter: 'occhiello',
-    heur: 'Misure sui pixel. Segnalano rischi di riproduzione, non la qualità dell’idea.',
-    twoTone: 'Marchio a due toni: misurato sulla sagoma ({a}) e sulle forme interne ({b}); vale il più basso.',
-    vOk: 'Tratti e spazi più sottili restano sopra 1 px fino a 16 px. Valuta idea e disegno: la scalabilità non è un problema.',
-    vStroke: 'Limitato dai tratti sottili. Parte del segno è più sottile del {p} del marchio, quindi sotto i {s} px circa scende sotto 1 px e comincia a spezzarsi. Di solito si risolve con una versione per piccoli formati più pesante.',
-    vGap: 'Limitato dagli spazi stretti. Gli spazi più stretti del {p} del marchio si chiudono sotto i {s} px circa e le forme si fondono. Apri gli spazi, oppure usa una versione per piccoli formati con meno tagli.',
-    s16: 'Regge a 16 px', s24: 'Buono da 24 px', s32: 'Buono da 32 px', s64: 'Serve una versione per piccoli formati', sBig: 'Troppo dettagliato per i piccoli formati',
-    belowMin: 'sotto il minimo', light: 'Chiaro', dark: 'Scuro', gridOn: 'Griglia', gridOff: 'Senza griglia', onBrand: 'Su colore brand', tonal: 'Tono su tono',
-    paper: 'Carta', kraft: 'Kraft', concrete: 'Cemento', chalk: 'Lavagna', metal: 'Metallo', emboss: 'Rilievo', deboss: 'Incavo', copy: 'Copia SVG', copied: 'Copiato',
-    secLeg: 'Dimensione e leggibilità', secLegP: 'Dove il marchio smette di funzionare quando rimpicciolisce o si sfoca.',
-    secForm: 'Forma', secFormP: 'Come sono costruiti forme, occhielli e masse.',
-    secCtx: 'Nei contesti', secCtxP: 'Il marchio dove vivrà davvero.',
-    secRep: 'Riproduzione', secRepP: 'Un solo inchiostro, materiali e processi di stampa.',
-    secFile: 'File ed esportazione', secFileP: 'Il file così come viene consegnato, e un kit PNG generato qui.',
-    tScale: 'Scala', nScale: 'Rendering nitidi da 128 a 16 px. Le dimensioni sotto il minimo sono segnalate.',
-    tPix: 'Pixel reali', nPix: 'Rendering a 16, 32 e 48 px ingranditi senza smussatura: quello che mostra una scheda del browser o una toolbar.',
-    tBlur: 'Sfocatura', nBlur: 'Perdita di nitidezza per distanza, vista debole o movimento. Un marchio forte mantiene la sagoma quando i dettagli sono spariti.',
-    blur: ['Nitido: vista normale', 'Morbido: lieve difetto visivo', 'Sfocato: ipovisione', 'Molto sfocato: grave difetto visivo', 'Solo sagoma'],
-    tNeg: 'Spazio negativo', nNeg: 'Il segno in nero, gli occhielli chiusi a colori. Gli occhielli piccoli si chiudono per primi; un’idea basata sullo spazio negativo deve leggersi ancora qui.',
+    change: 'Cambia logo', export: 'Esporta report', langLabel: 'Lingua', colors: '{n} colori', color1: '1 colore',
+    bg: 'Sfondo anteprima', bgWhite: 'Bianco', bgPaper: 'Grigio chiaro', bgInk: 'Nero', bgBrand: 'Colore brand',
+    brand: 'Nome del brand', color: 'Colore brand', ink: 'Una tinta', sampleTag: 'marchio di esempio', index: 'Indice dei test', verdictNav: 'Verdetto',
+    eHead: 'Mettilo alla prova prima del cliente.', eSub: 'Oltre 20 test di dimensioni, forma, contesto e stampa sul tuo logo, con dimensione minima e report PDF.',
+    eDrop: 'Trascina qui il tuo logo', eDropSub: 'SVG consigliato · va bene anche un PNG con sfondo trasparente · oppure incolla da Figma o Illustrator (Ctrl+V)',
+    choose: 'Scegli un file', sample: 'Non hai un file sottomano? Prova il marchio di esempio →',
+    e1h: 'Niente upload', e1p: 'Tutto gira in questa pagina. Il file non lascia il tuo computer: ok anche per lavori sotto NDA.',
+    e2h: 'Misure, non gusti', e2p: 'Tratto più sottile e spazio più stretto, convertiti nella dimensione minima a cui reggono.',
+    e3h: 'Report pronto da mandare', e3p: 'PDF con il nome del tuo studio, e una versione per il cliente senza punteggio.',
+    verdictLabel: 'Verdetto · scalabilità', minSize: 'Dimensione minima', toCheck: 'Da controllare', ofTests: '{n} su {t} test', goTest: 'Vai al test →',
+    passedAll: 'Tutti i {n} test superati', passedSome: '{n} test superati: {list}',
+    thin: 'Tratto più sottile', gap: 'Spazio più stretto', ofMark: 'del marchio', limiting: 'limitante',
+    fid16: 'Fedeltà a 16 px', fid32: 'Fedeltà a 32 px', parts: 'Parti 512 → 32 px', fill: 'Riempimento', sym: 'Simmetria', neg: 'Spazio negativo', counters: 'controforme', counter: 'controforma',
+    heur: 'Misure sui pixel: segnalano rischi di riproduzione, non la qualità dell’idea.',
+    howT: 'Come funziona il punteggio', howP: 'Logo Lab misura due cose sul marchio stesso: il tratto più sottile e lo spazio più stretto, su un rendering a 512 px, e controlla se le parti si spezzano o si fondono quando si assottigliano. Da qui ricava la dimensione minima a cui entrambi restano larghi almeno 1 px. Il punteggio è solo quella dimensione, su una scala in cui 16 px vale 10 e 256 px vale 0: nessun gusto e nessuna preferenza di stile. La misura coincide entro mezzo pixel con forme di spessore noto ed è stata provata su circa 380 marchi reali, dalle icone delle app agli stemmi. Un marchio dettagliato può essere giusto per il suo uso: uno stemma su un’etichetta di vino non deve funzionare a 16 px.',
+    twoTone: 'Marchio a due toni: misurato sulla silhouette ({a}) e sulle forme interne ({b}); conta il valore più basso.',
+    vOk: 'Tratti e spazi più sottili restano sopra 1 px fino a 16 px. La scalabilità non è un problema: giudica l’idea e il disegno.',
+    vStroke: 'Limitato dai tratti sottili: una parte dell’inchiostro è più sottile del {p} del marchio, quindi sotto circa {s} px scende sotto 1 px e si spezza. Di solito si risolve con una versione per piccole dimensioni più pesante.',
+    vGap: 'Limitato dagli spazi stretti: gli spazi più stretti del {p} del marchio si chiudono sotto circa {s} px e le forme si fondono. Apri gli spazi, oppure usa una versione per piccole dimensioni con meno tagli.',
+    s16: 'Regge a 16 px', s24: 'Buono da 24 px', s32: 'Buono da 32 px', s64: 'Serve una versione per piccole dimensioni', sBig: 'Troppo dettagliato per le piccole dimensioni',
+    fAll: 'Tutti i test · {n}', fWarn: 'Da controllare · {n}', fHint: 'Le sezioni tutte ok sono chiuse: aprile solo se ti servono.',
+    okCount: '{a}/{b} ok', warnCount: '{n} da controllare', open: 'Apri ↓', closeSec: 'Chiudi ↑', okPill: 'ok', checkPill: 'Controlla', what: 'Cosa succede:', fix: 'Come si risolve:',
+    secLeg: 'Dimensioni e leggibilità', secLegP: 'Dove il marchio smette di funzionare quando si rimpicciolisce o si sfoca.', secLegS: 'Dimensioni',
+    secForm: 'Forma', secFormP: 'Come sono costruiti forme, controforme e massa.',
+    secCtx: 'Nel contesto', secCtxP: 'Il marchio dove vivrà davvero.', secCtxS: 'Contesto',
+    secRep: 'Riproduzione', secRepP: 'Una tinta, materiali e processi di stampa.',
+    secFile: 'File ed export', secFileP: 'Il file così come viene consegnato, e un kit PNG generato qui.',
+    footer: 'Logo Lab gira tutto in questa pagina: il logo non viene caricato da nessuna parte.',
+    tScale: 'Scala', nScale: 'Da 128 a 16 px, rendering nitidi. Le dimensioni sotto il minimo vengono segnate.',
+    tPix: 'Pixel reali', nPix: '16, 32 e 48 px ingranditi senza smussatura, come in una scheda del browser o in una barra degli strumenti.',
+    tBlur: 'Sfocatura', nBlur: 'Perdita di nitidezza per distanza, vista debole o movimento. Un marchio forte tiene la silhouette quando i dettagli spariscono.',
+    blur: ['Nitido: vista normale', 'Leggera: lieve difetto visivo', 'Sfocato: ipovisione', 'Forte: grave difetto visivo', 'Solo silhouette'],
+    tNeg: 'Spazio negativo', nNeg: 'Il segno in nero, le controforme chiuse a colori. Le controforme piccole si chiudono per prime; un’idea basata sullo spazio negativo deve leggersi ancora qui.',
     tWeight: 'Peso visivo', nWeight: 'Dove sta la massa. La croce è il baricentro, il cerchio il centro geometrico: una distanza grande sembra decentrata in un ritaglio quadrato.',
     tClear: 'Area di rispetto', nClear: 'Una proposta di zona di rispetto. Lega l’unità a un elemento del marchio (altezza della x, spessore del tratto) e usala nelle linee guida.', unit: 'Unità {u}% dell’altezza',
     tIcon: 'Griglia icona app', nIcon: 'Il marchio su un’icona app sopra una griglia generica. Controlla dimensione ottica e centratura su fondo bianco, brand e scuro.',
-    tCurv: 'Pettini di curvatura', nCurv: 'Le punte mostrano quanto è stretta ogni curva. Un pettine regolare indica una curva pulita; i salti in rosso sono spigoli che a grande formato si vedono come ondeggiamenti.', kinks: '{n} salti di curvatura',
-    tAnch: 'Punti di ancoraggio e maniglie', nAnch: 'Punti di ancoraggio (quadrati) e maniglie Bézier (cerchi). Cerca punti superflui e maniglie non orizzontali o verticali agli estremi.', anch: '{a} punti · {h} maniglie · {o} fuori asse',
+    tCurv: 'Curvatura', nCurv: 'Le punte mostrano quanto è stretta ogni curva. Un pettine regolare indica una curva pulita; i salti in rosso sono spigoli che a grande formato si vedono come ondeggiamenti.', kinks: '{n} salti di curvatura',
+    tAnch: 'Punti di ancoraggio', nAnch: 'Punti di ancoraggio (quadrati) e maniglie Bézier (cerchi). Cerca punti superflui e maniglie non orizzontali o verticali agli estremi.', anch: '{a} punti · {h} maniglie · {o} fuori asse',
     tTabs: 'Favicon nelle schede', nTabs: 'La vera favicon a 16 px in schede del browser chiare e scure. Si riconosce al primo sguardo?',
-    tType: 'Abbinamenti tipografici', nType: 'Il marchio accanto al nome in sei direzioni tipografiche. Che voce ha già il simbolo?',
+    tType: 'Lockup tipografici', nType: 'Il marchio accanto al nome in sei direzioni tipografiche. Che voce ha già il simbolo?',
     tCard: 'Biglietto e badge', nCard: 'Un biglietto 85 × 55 mm e un badge, nelle proporzioni reali.',
-    tPhoto: 'Su fotografia', nPhoto: 'Immagini piene di dettagli, con la versione bianca o scura scelta in base alla luminosità. Regge senza una forma di contenimento?',
-    tBill: 'Cartellone', nBill: 'Grande, inclinato, visto da lontano. La sagoma resta chiara in prospettiva?',
+    tPhoto: 'Su foto', nPhoto: 'Immagini piene di dettagli, con la versione bianca o scura scelta in base alla luminosità. Regge senza una forma di contenimento?',
+    tBill: 'Cartellone', nBill: 'Grande, inclinato, visto da lontano. La silhouette resta chiara in prospettiva?',
     tPat: 'Pattern', nPat: 'Il marchio ripetuto come pattern. I marchi forti spesso fanno buoni pattern; i vuoti scomodi qui si vedono.',
     tWm: 'Filigrana', nWm: 'Una ripetizione trasparente su immagini, come nelle anteprime e nei documenti.',
-    tMono: 'Monocolore e negativo', nMono: 'Ricolorazione meccanica in un solo inchiostro e in negativo. Se l’idea sparisce, serve una versione monocolore disegnata apposta.', monoWarn: 'i colori sovrapposti si fondono',
-    tMat: 'Materiali', nMat: 'Carta uso mano, kraft, cemento, lavagna e metallo spazzolato. Attenzione alle parti sottili e ai colori poco contrastati.',
-    tEmb: 'Rilievo e incavo', nEmb: 'Rilievo a secco o incavo senza colore: solo la forma e i bordi portano il marchio.',
-    tHalf: 'Retino', nHalf: 'Un retino a punti grosso, come in quotidiani, serigrafia e riproduzioni a bassa risoluzione.',
-    tPatch: 'Toppa ricamata', nPatch: 'Resa a filo su una toppa rotonda. Linee sottili e occhielli piccoli cedono per primi: il ricamo vuole almeno 1 mm.',
-    tSrc: 'Codice SVG', nSrc: 'Il file così come viene consegnato. Cerca testo non vettorializzato, immagini incorporate, metadati dell’editor e gruppi vuoti.', live: 'testo vivo', noLive: 'nessun testo vivo', img: 'immagine incorporata', noImg: 'nessuna immagine',
-    tKit: 'Kit PNG', nKit: 'PNG trasparenti del marchio, più le dimensioni per favicon e icone app su fondo bianco.', all: 'Scarica tutto',
-    offset: 'scarto del baricentro {x}% x · {y}% y', name: 'Nome Cognome', role: 'Ospite',
-    pdfOpts: 'Report PDF', studio: 'Studio sul report', studioPh: 'Nome del tuo studio', clientV: 'Versione per il cliente: nascondi il punteggio e i test tecnici', noteL: 'Nota per il cliente', notePh: 'Facoltativa: cosa vuoi che il cliente capisca da questo report', prepared: 'A cura di {s}', noteH: 'Nota del designer',
-    howT: 'Come funziona il punteggio', howP: 'Logo Lab misura due cose sul marchio stesso: il tratto più sottile e lo spazio più stretto, su un rendering a 512 px, e controlla se le parti si spezzano o si fondono quando si assottigliano. Da qui ricava la dimensione minima a cui entrambi restano larghi almeno 1 px. Il punteggio è solo quella dimensione, su una scala in cui 16 px vale 10 e 256 px vale 0: nessun gusto e nessuna preferenza di stile. La misura coincide entro mezzo pixel con forme di spessore noto ed è stata provata su circa 380 marchi reali, dalle icone delle app agli stemmi. Un marchio dettagliato può essere giusto per il suo uso: uno stemma su un’etichetta di vino non deve funzionare a 16 px.',
-    pdfTitle: 'Report di test del logo', pdfGen: 'Generato con Logo Lab (brandsmith) il {d}', pdfPage: 'Pagina {n}', pdfMade: 'PDF scaricato', pdfFile: 'File',
+    tMono: 'Una tinta e negativo', nMono: 'Ricolorazione meccanica in un solo inchiostro e in negativo. Se l’idea sparisce, serve una versione monocromatica disegnata.', monoWarn: 'I colori sovrapposti si fondono',
+    tMat: 'Materiali', nMat: 'Carta, kraft, cemento, lavagna, metallo spazzolato. Attenzione alle parti sottili e ai colori poco contrastati.',
+    tEmb: 'Rilievo e incisione', nEmb: 'Senza colore: solo forma e bordi portano il marchio.',
+    tHalf: 'Mezzitoni', nHalf: 'Un retino a punti grosso, come in quotidiani, serigrafia e riproduzioni a bassa risoluzione.',
+    tPatch: 'Ricamo', nPatch: 'Resa a filo su una toppa rotonda. Linee sottili e controforme piccole cedono per prime: il ricamo vuole almeno 1 mm di filo.',
+    tSrc: 'Sorgente SVG', nSrc: 'Il file così come viene consegnato. Cerca testo vivo, immagini incorporate, metadati dell’editor e gruppi vuoti.', live: 'testo vivo', noLive: 'nessun testo vivo', img: 'immagine incorporata', noImg: 'nessuna immagine incorporata', copy: 'Copia SVG', copied: 'Copiato',
+    tKit: 'Kit PNG', nKit: 'PNG trasparenti del marchio da 16 a 1024 px, più apple-touch-icon, 192 e 512 su fondo bianco.', zip: 'Scarica .zip',
+    belowMin: 'sotto il minimo', light: 'Chiaro', dark: 'Scuro', gridOn: 'Griglia', gridOff: 'Senza griglia', onBrand: 'Su colore brand', tonal: 'Tono su tono',
+    paper: 'Carta', kraft: 'Kraft', concrete: 'Cemento', chalk: 'Lavagna', metal: 'Metallo', emboss: 'Rilievo', deboss: 'Incisione',
+    offset: 'baricentro {x}% x · {y}% y', name: 'Nome Cognome', role: 'Ospite',
+    wSizeW: 'Sotto i {s} px i {f} più sottili scendono sotto 1 px: il marchio si spezza o si chiude in favicon, icone app e avatar.', wSizeF: 'Disegna una versione per piccole dimensioni (tratti più pesanti, meno tagli) per tutto ciò che sta sotto i {s} px.',
+    wPixW: 'Sulla griglia di pixel reale di una scheda del browser (16 e 32 px) i dettagli più fini diventano grigi o spariscono.', wPixF: 'Verifica la versione piccola su queste stesse griglie; sotto i {s} px allinea i suoi tratti ai pixel interi.',
+    fStrokes: 'tratti', fGaps: 'spazi',
+    wWeightW: 'Il baricentro è spostato del {d}% rispetto al centro: in un ritaglio quadrato (avatar, icona app) il marchio sembra decentrato.', wWeightF: 'Nei formati quadrati centra otticamente la massa, non il rettangolo d’ingombro.',
+    wCurvW: '{n} salti improvvisi di curvatura: a grande formato si vedono come ondeggiamenti o spigoli.', wCurvF: 'Ridisegna quelle curve con meno punti e maniglie continue.',
+    wMonoW: 'Ricolorando tutto in una tinta, i colori sovrapposti si fondono e l’idea sparisce.', wMonoF: 'Disegna una versione monocromatica con la forma interna in negativo (scavata, non dipinta).',
+    wSrcW: 'Il file contiene testo vivo o un’immagine incorporata: non si vedrà uguale ovunque e non scala.', wSrcF: 'Vettorializza il testo e sostituisci le immagini con tracciati prima della consegna.',
+    exTitle: 'Esporta report', close: 'Chiudi', forWho: 'Per chi è', forMe: 'Per me / lo studio', forMeP: 'Punteggio, metriche e tutti i test tecnici.',
+    forClient: 'Per il cliente', forClientP: 'Niente punteggio: dimensione minima, contesti e la tua nota.', studio: 'Nome dello studio sul report', studioPh: 'Il nome del tuo studio',
+    noteL: 'Nota per il cliente', notePh: 'Facoltativa: cosa vuoi che il cliente porti a casa', includes: 'Cosa include',
+    incVerdict: 'Verdetto e dimensione minima', incScore: 'Punteggio e metriche', incCtx: 'Contesti: favicon, biglietto, cartellone, foto', incTech: 'Test tecnici: curvatura, ancoraggi, sorgente SVG', incNote: 'Nota per il cliente',
+    kitRow: 'Kit PNG: 16–1024 px, apple-touch-icon, 192 e 512', pagesInfo: 'A4 · {n} pagine · generato in locale', dlPdf: 'Scarica PDF', dlPdfClient: 'Scarica PDF per il cliente',
+    previewOf: 'Anteprima · pagina 1 di {n}', subDesigner: 'Report tecnico · {n} test', subClient: 'Come usare il nuovo marchio', pdfMade: 'PDF scaricato', zipMade: 'Kit PNG scaricato', usePx: 'Usalo non più piccolo di',
+    rTech: 'Report tecnico del marchio', rTested: 'Marchio testato', rTests: '{n} test', rToCheck: 'Da controllare · {n} su {t}', rNone: 'Niente da controllare: tutti i test sono superati.', rPage: 'pag. {n}', rNote: 'Nota del designer',
+    rReport: 'Report tecnico', rLadderOk: 'Rendering nitidi da 128 a 16 px: il marchio regge a tutte le dimensioni.', rLadderBad: 'Rendering nitidi da 128 a 16 px. Sotto i {s} px i {f} più sottili scendono sotto 1 px.',
+    rPixP: 'Ingranditi senza smussatura: è ciò che mostra una scheda del browser.', rPix16: 'A 16 px', rPix16ok: 'il marchio si legge ancora.', rPix16bad: 'i dettagli sotto il minimo si chiudono o spariscono.', rPix32: 'A 32 px', rPix32ok: 'il disegno si legge come previsto.', rPix32bad: 'i dettagli più fini sono sotto un pixel.',
+    rBlurP: 'Un marchio forte tiene la silhouette quando i dettagli spariscono.', rBlurL: ['Nitido', 'Leggera', 'Sfocato', 'Solo silhouette'],
+    rMinTag: '! Minimo {s} px', rOk: 'OK', pdfTitle: 'Report di test del logo', rCheck: '! Da controllare', rFile: 'File SVG', rFileLine: '{e} elementi · {lt} · {im}', rPng: 'File PNG: nessun sorgente da ispezionare.',
+    rNext: 'Prossimi passi', nxSmall: 'Versione per piccole dimensioni', nxSmallP: '(sotto i {s} px): tratti più pesanti e meno tagli, così resta aperta anche in favicon e icona app.',
+    nxCheck32: 'Controlla favicon e icona app', nxCheck32P: ': il marchio regge da {s} px; guarda la scheda a 16 px prima di approvarlo.',
+    nxMono: 'Versione monocromatica disegnata', nxMonoP: ': la forma interna scavata invece che dipinta.',
+    nxCurv: 'Pulisci le curve', nxCurvP: ': {n} salti di curvatura da ridisegnare.', nxWeight: 'Centratura ottica', nxWeightP: ' nei formati quadrati (avatar, icona app).',
+    nxSrc: 'File master pulito', nxSrcP: ': vettorializza il testo e togli le immagini incorporate.', nxRules: 'Regole d’uso', nxRulesP: ': marchio completo da {s} px in su; versione piccola per favicon, icona app e avatar.',
+    nxRetest: 'Rifai il test sulle nuove versioni e allega i report al manuale.',
+    cTitle: 'Il tuo nuovo marchio, e come usarlo al meglio', cBrief: 'In breve', cWhich: 'Quale versione usare',
+    cStrongBig: 'Forte in grande', cStrongBigP: 'Insegne, stampa, sito, packaging: il marchio si legge subito.',
+    cFar: 'Riconoscibile da lontano', cFarP: 'La forma resta chiara anche su un cartellone o su una foto.',
+    cSmallOk: 'Funziona anche piccolo', cSmallOkP: 'Favicon, icona app e avatar usano lo stesso marchio.', cSmallNeed: 'Una versione per il piccolo', cSmallNeedP: 'Per icone e avatar prepariamo una versione semplificata.',
+    cFull: 'Marchio completo', cFrom: 'da {s} px in su', cFullP: 'Sito, stampa, insegne, materiali', cFullAll: 'Ovunque, anche favicon e icona app',
+    cSmall: 'Versione piccola', cUnder: 'sotto i {s} px', cSmallP: 'Favicon, icona app, avatar · in preparazione', cStudioNote: 'Nota dello studio',
+    cWhere: 'Il marchio dove vivrà', cAvoid: 'Da evitare', cCtxCard: 'Biglietto da visita', cCtxBill: 'Cartellone', cCtxKraft: 'Packaging in kraft', cCtxPat: 'Pattern di marca', cCtxEmb: 'Rilievo su carta', cCtxTab: 'Scheda del browser e icona app',
+    cAvSmall: 'Il marchio completo sotto i {s} px: usa la versione piccola.', cAvMono: 'Ricolorarlo da soli in un colore: chiedi la versione monocromatica.', cAvDistort: 'Schiacciarlo o deformarlo: le proporzioni fanno parte del marchio.',
+    cFootQ: 'Dubbi su un utilizzo? Scrivici prima di stampare.', prepared: 'Preparato da {s}', preparedLL: 'Preparato con Logo Lab', genLocal: 'Generato in locale con Logo Lab',
   }
 };
 let LANG = 'en';
 try { LANG = localStorage.getItem('logolab-lang') || ((navigator.language || '').toLowerCase().startsWith('it') ? 'it' : 'en'); } catch (e) { LANG = (navigator.language || '').toLowerCase().startsWith('it') ? 'it' : 'en'; }
 function t(k, vars) { let s = (I18N[LANG] && I18N[LANG][k]) ?? I18N.en[k] ?? k; if (vars && typeof s === 'string') for (const [a, b] of Object.entries(vars)) s = s.replaceAll('{' + a + '}', b); return s; }
-function applyStatic() { document.documentElement.lang = LANG; document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t)); $('#lang').textContent = LANG === 'it' ? 'EN' : 'IT'; $('#foot').textContent = t('heur') + ' · Logo Lab · brandsmith'; }
+function applyStatic() {
+  document.documentElement.lang = LANG; document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
+  $('#langgroup').setAttribute('aria-label', t('langLabel'));
+  document.querySelectorAll('#langgroup button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === LANG));
+}
 
 // ---------------- state & loading ----------------
 const SAMPLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect x="6" y="6" width="108" height="108" rx="26" fill="#1d2b53"/><path d="M33 86 60 30l27 56H71.5L60 61.5 48.5 86z" fill="#ff8a3d"/><circle cx="60" cy="78" r="2.2" fill="#ffffff"/></svg>';
-const state = { name: 'Brand', color: '#1F2937', mono: '#141414', proofBg: 'sheet', sample: false, studio: '', client: false, note: '' };
+const state = { name: 'Brand', color: '#1F2937', mono: '#141414', proofBg: 'sheet', sample: false, studio: '', note: '', filter: 'all', mode: 'designer', opened: new Set(), closed: new Set() };
 try { state.studio = localStorage.getItem('logolab-studio') || ''; } catch (e) {}
 const IMG = new Image();
-IMG.onload = () => { analyse(); if (location.hash === '#metrics') return; render(); };
+IMG.onload = () => { analyse(); if (location.hash === '#metrics') return; computeAll(); render(); };
 IMG.onerror = () => toast('Could not read this logo. For SVG, check it has a viewBox or width/height.');
 function start() {
   state.name = DATA.name || DATA.file.replace(/\.[^.]+$/, ''); state.color = DATA.color || state.color;
   if (!DATA.uri && DATA.svg) DATA.uri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgWithSize(DATA.svg));
-  $('#fname').textContent = state.sample ? t('sampleTag') : DATA.file; IMG.src = DATA.uri;
+  state.opened.clear(); state.closed.clear(); state.filter = 'all';
+  IMG.src = DATA.uri;
 }
 function svgWithSize(text) {
   const doc = new DOMParser().parseFromString(text, 'image/svg+xml'), el = doc.documentElement; if (el.nodeName !== 'svg') return text;
@@ -316,12 +543,17 @@ function openFile(f) {
 }
 document.addEventListener('dragover', e => { e.preventDefault(); document.body.classList.add('dragging'); });
 document.addEventListener('dragleave', e => { if (!e.relatedTarget) document.body.classList.remove('dragging'); });
-document.addEventListener('drop', e => { e.preventDefault(); document.body.classList.remove('dragging'); openFile(e.dataTransfer.files[0]); });
-$('#open').onchange = e => { openFile(e.target.files[0]); e.target.value = ''; };
-$('#lang').onclick = () => { LANG = LANG === 'it' ? 'en' : 'it'; try { localStorage.setItem('logolab-lang', LANG); } catch (e) {} applyStatic(); if (DATA) { $('#fname').textContent = state.sample ? t('sampleTag') : DATA.file; render(); } else showDrop(); };
-$('#pdf').onclick = () => exportPdf();
+document.addEventListener('drop', e => { e.preventDefault(); document.body.classList.remove('dragging'); if (e.dataTransfer.files[0]) openFile(e.dataTransfer.files[0]); });
+// paste from Figma ("Copy as SVG"), Illustrator (copy → text) or an image on the clipboard
+document.addEventListener('paste', e => {
+  if (e.target.closest && e.target.closest('input, textarea')) return;
+  const dt = e.clipboardData; if (!dt) return;
+  const txt = dt.getData('text/plain') || dt.getData('text/html') || '';
+  const m = txt.match(/<svg[\s\S]*<\/svg>/i);
+  if (m) { e.preventDefault(); loadSvgText(m[0], 'pasted.svg', false); return; }
+  for (const it of dt.items || []) if (it.kind === 'file' && /image\/(png|svg\+xml)/.test(it.type)) { e.preventDefault(); const f = it.getAsFile(); openFile(new File([f], f.name && f.name !== 'image.png' ? f.name : (it.type === 'image/png' ? 'pasted.png' : 'pasted.svg'), { type: it.type })); return; }
+});
 function toast(msg) { const el = $('#toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2400); }
-
 // ---------- drawing helpers ----------
 function canvas(w, h = w) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
 function fit(size, pad) { const iw = IMG.naturalWidth || size, ih = IMG.naturalHeight || size; const s = Math.min((size - 2 * pad) / iw, (size - 2 * pad) / ih); return { w: iw * s, h: ih * s, x: (size - iw * s) / 2, y: (size - ih * s) / 2 }; }
@@ -527,16 +759,17 @@ const TESTS = [];
 const test = (id, sec, draw, o = {}) => TESTS.push({ id, sec, draw, ...o });
 
 test('scale', 'leg', ({ opt }) => {
-  const dark = opt === 1, [c, x] = sheet(1440, 540, dark ? '#121418' : '#ffffff'); const sizes = [128, 64, 48, 32, 24, 16]; const k = 2, base = 360; let px = 70;
-  for (const s of sizes) { const d = s * k; drawLogo(x, px, base - d, d, d, dark ? '#ffffff' : null); const below = s < M.minSize;
-    label(x, s + ' px', px + d / 2, base + 44, { color: below ? '#d0126c' : (dark ? '#9aa1ad' : '#646b78') }); if (below) label(x, t('belowMin'), px + d / 2, base + 72, { size: 15, color: '#d0126c' }); px += d + 70; }
+  const dark = opt === 1, [c, x] = sheet(1440, 540, dark ? '#121418' : '#ffffff'); const sizes = [128, 64, 48, 32, 24, 16]; const k = 2, base = 360, gap = 36;
+  const slots = sizes.map(s => Math.max(s * k, 120)), total = slots.reduce((a, b) => a + b, 0) + gap * (sizes.length - 1); let px = (1440 - total) / 2;
+  sizes.forEach((s, i) => { const d = s * k, cx = px + slots[i] / 2; drawLogo(x, cx - d / 2, base - d, d, d, dark ? '#ffffff' : null); const below = s < M.minSize;
+    label(x, s + ' px', cx, base + 44, { color: below ? '#d0126c' : (dark ? '#9aa1ad' : '#646b78') }); if (below) label(x, '✕ ' + t('belowMin'), cx, base + 72, { size: 15, color: '#d0126c' }); px += slots[i] + gap; });
   return c; }, { wide: true, seg: ['light', 'dark'], status: () => level(), readout: () => [t('minSize') + ' ' + M.minSize + ' px'] });
 test('pix', 'leg', () => {
-  const [c, x] = sheet(); const items = [[16, 8], [32, 4], [48, 3]]; let px = 40;
-  for (const [s, z] of items) { const sm = logoCanvas(s, null, Math.round(s * .06)); x.imageSmoothingEnabled = false; const d = s * z; const py = 150; x.drawImage(sm, px, py, d, d);
+  const [c, x] = sheet(1440, 540); const items = [[16, 14], [32, 7], [48, 5]], gap = 90; const tot = items.reduce((a, [s, z]) => a + s * z, 0) + gap * 2; let px = (1440 - tot) / 2;
+  for (const [s, z] of items) { const sm = logoCanvas(s, null, Math.round(s * .06)); x.imageSmoothingEnabled = false; const d = s * z; const py = (540 - d) / 2 - 24; x.drawImage(sm, px, py, d, d);
     if (s === 16) { x.strokeStyle = 'rgba(0,0,0,.08)'; x.lineWidth = 1; for (let i = 0; i <= s; i++) { x.beginPath(); x.moveTo(px + i * z + .5, py); x.lineTo(px + i * z + .5, py + d); x.moveTo(px, py + i * z + .5); x.lineTo(px + d, py + i * z + .5); x.stroke(); } }
-    x.strokeStyle = '#dadee5'; x.strokeRect(px - .5, py - .5, d + 1, d + 1); label(x, `${s} px ×${z}`, px + d / 2, py + d + 40); px += d + 56; }
-  return c; }, { status: () => level() });
+    x.strokeStyle = '#dadee5'; x.strokeRect(px - .5, py - .5, d + 1, d + 1); const below = s < M.minSize; label(x, `${s} px ×${z}`, px + d / 2, py + d + 40, below ? { color: '#d0126c' } : {}); px += d + gap; }
+  return c; }, { wide: true, status: () => level() });
 test('blur', 'leg', ({ val }) => {
   const [c, x] = sheet(); x.filter = `blur(${val * 2}px)`; drawLogo(x, 180, 90, 360, 360); x.filter = 'none'; return c;
 }, { slider: { min: 0, max: 14, step: .5, value: 4 }, out: v => v.toFixed(1) + ' px · ' + t('blur')[v <= 2 ? 0 : v <= 4 ? 1 : v <= 7 ? 2 : v <= 10 ? 3 : 4] });
@@ -664,130 +897,263 @@ test('patch', 'rep', () => {
   const s = 250, tl = logoCanvas(s, null, 0), tx = tl.getContext('2d'); tx.globalCompositeOperation = 'source-atop'; tx.strokeStyle = 'rgba(0,0,0,.2)'; tx.lineWidth = 1.2; for (let k = -s; k < 2 * s; k += 4) { tx.beginPath(); tx.moveTo(k, 0); tx.lineTo(k + s, s); tx.stroke(); }
   x.shadowColor = 'rgba(0,0,0,.35)'; x.shadowOffsetY = 2; x.shadowBlur = 2; x.drawImage(tl, (W - s) / 2, (H - s) / 2); x.shadowColor = 'transparent'; return c; });
 
-// ---------------- rendering ----------------
-const SECTIONS = [['leg', 'secLeg', 'secLegP'], ['form', 'secForm', 'secFormP'], ['ctx', 'secCtx', 'secCtxP'], ['rep', 'secRep', 'secRepP'], ['file', 'secFile', 'secFileP']];
-const TITLES = { scale: 'tScale', pix: 'tPix', blur: 'tBlur', neg: 'tNeg', weight: 'tWeight', clear: 'tClear', icon: 'tIcon', curv: 'tCurv', anch: 'tAnch', tabs: 'tTabs', type: 'tType', card: 'tCard', photo: 'tPhoto', bill: 'tBill', pat: 'tPat', wm: 'tWm', mono: 'tMono', mat: 'tMat', emb: 'tEmb', half: 'tHalf', patch: 'tPatch' };
-const NOTES = Object.fromEntries(Object.entries(TITLES).map(([k, v]) => [k, 'n' + v.slice(1)]));
-const LIVE = {}; // id -> { opt, val, info, canvas }
 
+// ---------------- results ----------------
+const SECTIONS = [['leg', 'secLeg', 'secLegP', 'secLegS'], ['form', 'secForm', 'secFormP', 'secForm'], ['ctx', 'secCtx', 'secCtxP', 'secCtxS'], ['rep', 'secRep', 'secRepP', 'secRep'], ['file', 'secFile', 'secFileP', 'secFile']];
+const TITLES = { scale: 'tScale', pix: 'tPix', blur: 'tBlur', neg: 'tNeg', weight: 'tWeight', clear: 'tClear', icon: 'tIcon', curv: 'tCurv', anch: 'tAnch', tabs: 'tTabs', type: 'tType', card: 'tCard', photo: 'tPhoto', bill: 'tBill', pat: 'tPat', wm: 'tWm', mono: 'tMono', mat: 'tMat', emb: 'tEmb', half: 'tHalf', patch: 'tPatch', src: 'tSrc', kit: 'tKit' };
+const NOTES = Object.fromEntries(Object.entries(TITLES).map(([k, v]) => [k, 'n' + v.slice(1)]));
+const LIVE = {}; // id -> { opt, val, info, canvas, status, readout }
+let RES = [];    // [{ id, sec, status, T }] in display order
+const isFlag = s => s === 'warn' || s === 'bad';
+
+function srcInfo() {
+  const s = DATA.svg || '';
+  return { live: /<text[\s>]/.test(s), img: /<image[\s>]/.test(s), els: (s.match(/<(path|rect|circle|ellipse|polygon|polyline|line)[\s>/]/g) || []).length, kb: (s.length / 1024).toFixed(1) };
+}
+function drawTest(T) { const live = LIVE[T.id]; live.info = {}; live.canvas = T.draw({ opt: live.opt, val: live.val, info: live.info }); }
+function computeAll() {
+  RES = [];
+  for (const T of TESTS) {
+    if (T.svgOnly && !DATA.svg) continue;
+    const live = LIVE[T.id] || (LIVE[T.id] = { opt: 0, val: T.slider ? T.slider.value : 0 });
+    try { drawTest(T); } catch (e) { live.canvas = null; live.error = e.message; }
+    live.status = T.status ? T.status(live.info) : 'ok';
+    live.readout = T.readout ? T.readout(live.info) : [];
+    RES.push({ id: T.id, sec: T.sec, T });
+  }
+  if (DATA.svg) { const si = srcInfo(); LIVE.src = { info: si, status: si.live || si.img ? 'warn' : 'ok', readout: [] }; RES.push({ id: 'src', sec: 'file' }); }
+  LIVE.kit = { status: 'ok', readout: [] }; RES.push({ id: 'kit', sec: 'file' });
+}
+const flagged = () => RES.filter(r => isFlag(LIVE[r.id].status));
+function flagText(id) {
+  const L = LIVE[id] || {};
+  if (id === 'pix') return { what: t('wPixW', { s: M.minSize }), fix: t('wPixF', { s: M.minSize }) };
+  if (id === 'scale') return { what: t('wSizeW', { s: M.minSize, f: t(M.limit === 'strokes' ? 'fStrokes' : 'fGaps') }), fix: t('wSizeF', { s: M.minSize }) };
+  if (id === 'weight') return { what: t('wWeightW', { d: (Math.max(Math.abs(M.offX), Math.abs(M.offY)) * 100).toFixed(1) }), fix: t('wWeightF') };
+  if (id === 'curv') return { what: t('wCurvW', { n: L.info ? L.info.kinks : 0 }), fix: t('wCurvF') };
+  if (id === 'mono') return { what: t('wMonoW'), fix: t('wMonoF') };
+  if (id === 'src') return { what: t('wSrcW'), fix: t('wSrcF') };
+  return { what: (L.readout || []).join(' · '), fix: '' };
+}
+function nColors() {
+  const c = canvas(96), x = c.getContext('2d'); drawLogo(x, 0, 0, 96, 96); const d = x.getImageData(0, 0, 96, 96).data, set = new Set();
+  // count only colours that cover at least 1% of the ink: anti-aliased edges between two fills are not colours
+  const cnt = new Map(); let tot = 0; for (let i = 0; i < d.length; i += 4) if (d[i + 3] > 250) { const q = ((d[i] >> 5) << 6) | ((d[i + 1] >> 5) << 3) | (d[i + 2] >> 5); cnt.set(q, (cnt.get(q) || 0) + 1); tot++; }
+  const big = [...cnt.values()].filter(v => v >= tot * .01).length; return Math.max(1, Math.min(big, 9));
+}
+
+// ---------------- page shell ----------------
+function setChrome(hasLogo) {
+  $('#changeBtn').hidden = !hasLogo; $('#exportBtn').hidden = !hasLogo; $('#mbar').hidden = !hasLogo; $('#filechip').hidden = !hasLogo;
+  if (hasLogo) {
+    const chip = $('#filechip'); chip.querySelector('img').src = DATA.uri; chip.querySelector('.n').textContent = state.sample ? t('sampleTag') : DATA.file;
+    const n = nColors(); chip.querySelector('.m').textContent = '· ' + (DATA.svg ? 'SVG' : 'PNG') + ' · ' + (n === 1 ? t('color1') : t('colors', { n }));
+  }
+}
+const ICON_UP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 20h16"/></svg>';
 function showDrop() {
-  $('#nav').innerHTML = ''; $('#fname').textContent = ''; $('#pdf').disabled = true;
-  $('#main').innerHTML = `<section class="drop"><h1>${t('dropTitle')}</h1><p>${t('dropSub')}</p><div class="row"><label class="btn primary" for="open">${t('choose')}</label><button class="btn" id="sample" type="button">${t('sample')}</button></div></section>`;
+  setChrome(false);
+  $('#main').innerHTML = `<main class="wrap"><div class="empty">
+    <div class="hero"><h1>${t('eHead')}</h1><p>${t('eSub')}</p></div>
+    <label class="drop" for="file2"><span class="ic">${ICON_UP}</span><span class="big">${t('eDrop')}</span><span class="sm">${t('eDropSub')}</span>
+      <span class="fake">${ICON_UP}${t('choose')}</span><input id="file2" type="file" accept=".svg,.png,image/svg+xml,image/png"></label>
+    <div style="display:flex;justify-content:center"><button type="button" class="btn" id="sample">${t('sample')}</button></div>
+    <div class="three"><div><b>${t('e1h')}</b><span>${t('e1p')}</span></div><div><b>${t('e2h')}</b><span>${t('e2p')}</span></div><div><b>${t('e3h')}</b><span>${t('e3p')}</span></div></div>
+  </div></main>`;
+  $('#file2').onchange = e => { openFile(e.target.files[0]); e.target.value = ''; };
   $('#sample').onclick = () => loadSvgText(SAMPLE, 'sample.svg', true);
 }
 
+function rulerPos(v) { return (Math.log2(clamp(v, 16, 256)) - 4) / 4 * 100; }
 function render() {
   if (M.empty) { toast('No visible shapes found in this file.'); return; }
-  $('#pdf').disabled = false;
-  const main = $('#main'); main.innerHTML = '';
-  main.appendChild(reportEl());
-  const counts = {};
-  for (const [sec, title, intro] of SECTIONS) {
-    const el = document.createElement('section'); el.className = 'section'; el.id = 's-' + sec;
-    el.innerHTML = `<div class="section-head"><h2>${t(title)}</h2><p>${t(intro)}</p></div><div class="tests"></div>`; main.appendChild(el);
-    const grid = el.querySelector('.tests'); counts[sec] = 0;
-    const n = TESTS.filter(x => x.sec === sec && !x.wide && (!x.svgOnly || DATA.svg)).length + (sec === 'file' ? (DATA.svg ? 2 : 1) : 0);
-    grid.style.setProperty('--cols', n % 3 === 0 ? 3 : n % 2 === 0 ? 2 : 3);
-    for (const T of TESTS.filter(x => x.sec === sec).sort((a, b) => (b.wide ? 1 : 0) - (a.wide ? 1 : 0))) { if (T.svgOnly && !DATA.svg) continue; const st = testEl(T, grid); if (st === 'warn' || st === 'bad') counts[sec]++; }
-    if (sec === 'file') fileTests(grid);
-  }
-  $('#nav').innerHTML = `<a href="#report">${t('scal')}</a>` + SECTIONS.map(([sec, title]) => `<a href="#s-${sec}">${t(title)}${sec === 'file' ? '' : `<span class="n${counts[sec] ? '' : ' zero'}">${counts[sec] ? '!' + counts[sec] : '✓'}</span>`}</a>`).join('');
+  setChrome(true);
+  const y = scrollY, fl = flagged(), N = RES.length;
+  $('#main').innerHTML = `<div class="wrap app"><aside class="side">${specimenHTML()}${indexHTML(fl)}</aside>
+    <main class="content">${verdictHTML(fl, N)}
+      <div class="filterbar"><div class="seg" role="tablist" aria-label="Filter"><button type="button" role="tab" data-f="all" aria-selected="${state.filter === 'all'}">${t('fAll', { n: N })}</button><button type="button" role="tab" data-f="warn" aria-selected="${state.filter === 'warn'}">${t('fWarn', { n: fl.length })}</button></div><span class="hint">${t('fHint')}</span></div>
+      <nav class="chips" aria-label="${t('index')}">${chipsHTML(fl)}</nav>
+      <div id="secs" style="display:flex;flex-direction:column;gap:24px"></div>
+      <footer class="page">${t('footer')}</footer></main></div>`;
+  wireSpecimen();
+  document.querySelectorAll('.filterbar [data-f]').forEach(b => b.onclick = () => { state.filter = b.dataset.f; render(); });
+  document.querySelectorAll('[data-goto]').forEach(a => a.onclick = e => { const id = a.dataset.goto, sec = (RES.find(r => r.id === id) || {}).sec; if (sec && !secOpen(sec)) { e.preventDefault(); state.opened.add(sec); renderSections(); requestAnimationFrame(() => document.getElementById('t-' + id)?.scrollIntoView()); } });
+  document.querySelectorAll('nav.index a[data-sec], .chips a[data-sec]').forEach(a => a.onclick = e => { const s = a.dataset.sec; if (!secOpen(s)) { state.opened.add(s); state.closed.delete(s); renderSections(); } });
+  renderSections();
+  scrollTo(0, y);
   document.title = 'Logo Lab — ' + (state.sample ? t('sampleTag') : DATA.file);
 }
-
-function reportEl() {
-  const el = document.createElement('section'); el.className = 'report'; el.id = 'report';
-  const lv = level(), sz = [16, 24, 32, 48, 64, 128, 256], pos = v => (Math.log2(clamp(v, 16, 256)) - 4) / 4 * 100;
-  const bgs = [['sheet', '#ffffff'], ['paper', '#eef0f3'], ['ink', '#15171c'], ['brand', state.color]];
-  el.innerHTML = `
-  <div class="panel specimen">
-    <div class="proof" id="proof"><img alt=""><i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i><i class="reg"></i></div>
-    <div class="swatches"><span class="lbl">${t('bg')}</span>${bgs.map(([k, c]) => `<button type="button" class="sw" data-bg="${k}" style="background:${c}" aria-pressed="${state.proofBg === k}" aria-label="${k}"></button>`).join('')}</div>
-    <div class="fields">
-      <label class="field"><span>${t('brand')}</span><input type="text" id="bname" value="${esc(state.name)}"></label>
-      <label class="field"><span>${t('color')}</span><input type="color" id="bcolor" value="${state.color}"></label>
-      <label class="field"><span>${t('ink')}</span><input type="color" id="mcolor" value="${state.mono}"></label>
-    </div>
-    <div class="pdfopts">
-      <span class="eyebrow">${t('pdfOpts')}</span>
-      <label class="field"><span>${t('studio')}</span><input type="text" id="studio" value="${esc(state.studio)}" placeholder="${t('studioPh')}"></label>
-      <label class="check"><input type="checkbox" id="client" ${state.client ? 'checked' : ''}> ${t('clientV')}</label>
-      <label class="field"><span>${t('noteL')}</span><textarea id="note" rows="2" placeholder="${t('notePh')}">${esc(state.note)}</textarea></label>
-    </div>
-  </div>
-  <div class="panel verdict">
-    <div class="eyebrow">${t('scal')}</div>
-    <div class="headline">
-      <div class="big">${M.score.toFixed(1)}<small> / 10</small></div>
-      <div class="minsize"><span class="eyebrow">${t('minSize')}</span><b>${M.minSize} px</b></div>
-      <span class="pill ${lv}">${t(stampKey())}</span>
-    </div>
-    <div class="ruler" aria-hidden="true"><div class="track"></div><div class="zone" style="left:${pos(M.minSizeRaw)}%;right:0"></div>
-      ${sz.map(s => `<span class="tick" style="left:${pos(s)}%">${s}</span>`).join('')}<span class="pin${pos(M.minSizeRaw) < 5 ? ' start' : ''}" style="left:${pos(M.minSizeRaw)}%">${M.minSizeRaw < 16 ? '≤ 16' : Math.round(M.minSizeRaw)} px</span></div>
-    <p class="lead">${verdictText()}</p>
-    <div class="measures">
-      <div class="measure ${M.limit === 'strokes' && M.minSizeRaw > 16 ? 'limit' : ''}"><span class="eyebrow">${t('thin')}</span><span class="v">${pctOfMark(M.tInk)}</span><span class="s">${t('ofMark')} · ${M.limit === 'strokes' && M.minSizeRaw > 16 ? t('limiting') : t('fine')}</span></div>
-      <div class="measure ${M.limit === 'gaps' && M.minSizeRaw > 16 ? 'limit' : ''}"><span class="eyebrow">${t('gap')}</span><span class="v">${pctOfMark(M.tGap)}</span><span class="s">${t('ofMark')} · ${M.limit === 'gaps' && M.minSizeRaw > 16 ? t('limiting') : t('fine')}</span></div>
-    </div>
-    <dl class="stats">
-      <div><dt>${t('fid16')}</dt><dd>${Math.round((1 - clamp(M.err16)) * 100)}%</dd></div>
-      <div><dt>${t('fid32')}</dt><dd>${Math.round((1 - clamp(M.err32)) * 100)}%</dd></div>
-      <div><dt>${t('parts')}</dt><dd>${M.fg256} → ${M.fg32}</dd></div>
-      <div><dt>${t('fill')}</dt><dd>${Math.round(M.fill * 100)}%</dd></div>
-      <div><dt>${t('sym')}</dt><dd>${Math.round(M.symH * 100)}%</dd></div>
-      <div><dt>${t('neg')}</dt><dd>${Math.round(M.negRatio * 100)}% · ${M.holes}</dd></div>
-    </dl>
-    <p class="fine">${t('heur')}</p>
-    <details class="how"><summary>${t('howT')}</summary><p>${t('howP')}</p></details>
-  </div>`;
-  const proof = el.querySelector('#proof'); proof.querySelector('img').src = DATA.uri;
-  const paint = () => { const c = { sheet: '#ffffff', paper: '#eef0f3', ink: '#15171c', brand: state.color }[state.proofBg]; proof.style.background = c; proof.querySelector('img').style.filter = (state.proofBg === 'ink' || (state.proofBg === 'brand' && lum(hexToRgb(state.color)) < .3)) ? 'brightness(0) invert(1)' : 'none'; };
+function secTests(sec) { return RES.filter(r => r.sec === sec); }
+function secFlags(sec) { return secTests(sec).filter(r => isFlag(LIVE[r.id].status)); }
+function secOpen(sec) { return (secFlags(sec).length > 0 && !state.closed.has(sec)) || state.opened.has(sec); }
+function specimenHTML() {
+  const bgs = [['sheet', '#ffffff', 'bgWhite'], ['paper', '#eef0f3', 'bgPaper'], ['ink', '#15171c', 'bgInk'], ['brand', state.color, 'bgBrand']];
+  return `<section class="card specimen"><div class="proof" id="proof"><img alt="${esc(state.name)}" src="${DATA.uri}"></div>
+    <div class="spec-body"><div class="row-sb"><span class="lbl" id="bglbl">${t('bg')}</span><div class="swatches" role="group" aria-labelledby="bglbl">${bgs.map(([k, c, l]) => `<button type="button" class="sw" data-bg="${k}" aria-label="${t(l)}" aria-pressed="${state.proofBg === k}"><span style="background:${c}"></span></button>`).join('')}</div></div>
+    <label class="field">${t('brand')}<input type="text" id="bname" value="${esc(state.name)}"></label>
+    <div class="colors"><label class="colorpick"><span class="chip" style="background:${state.color}"></span><span><b>${t('color')}</b><code>${state.color.toUpperCase()}</code></span><input type="color" id="bcolor" value="${state.color}" aria-label="${t('color')}"></label>
+      <label class="colorpick"><span class="chip" style="background:${state.mono}"></span><span><b>${t('ink')}</b><code>${state.mono.toUpperCase()}</code></span><input type="color" id="mcolor" value="${state.mono}" aria-label="${t('ink')}"></label></div></div></section>`;
+}
+function wireSpecimen() {
+  const proof = $('#proof'), img = proof.querySelector('img');
+  const paint = () => { proof.style.background = { sheet: '#ffffff', paper: '#eef0f3', ink: '#15171c', brand: state.color }[state.proofBg]; img.style.filter = (state.proofBg === 'ink' || (state.proofBg === 'brand' && lum(hexToRgb(state.color)) < .3)) ? 'brightness(0) invert(1)' : 'none'; };
   paint();
-  el.querySelectorAll('.sw').forEach(b => b.onclick = () => { state.proofBg = b.dataset.bg; el.querySelectorAll('.sw').forEach(x => x.setAttribute('aria-pressed', x === b)); paint(); });
-  let tmr; const rerender = () => { clearTimeout(tmr); tmr = setTimeout(() => { const y = scrollY; render(); scrollTo(0, y); }, 250); };
-  el.querySelector('#bname').oninput = e => { state.name = e.target.value || 'Brand'; rerender(); };
-  el.querySelector('#bcolor').oninput = e => { state.color = e.target.value; rerender(); };
-  el.querySelector('#mcolor').oninput = e => { state.mono = e.target.value; rerender(); };
-  el.querySelector('#studio').oninput = e => { state.studio = e.target.value; try { localStorage.setItem('logolab-studio', state.studio); } catch (er) {} };
-  el.querySelector('#client').onchange = e => { state.client = e.target.checked; };
-  el.querySelector('#note').oninput = e => { state.note = e.target.value; };
+  document.querySelectorAll('.sw').forEach(b => b.onclick = () => { state.proofBg = b.dataset.bg; document.querySelectorAll('.sw').forEach(x => x.setAttribute('aria-pressed', x === b)); paint(); });
+  let tmr; const redo = () => { clearTimeout(tmr); tmr = setTimeout(() => { computeAll(); render(); }, 300); };
+  $('#bname').oninput = e => { state.name = e.target.value || 'Brand'; redo(); };
+  $('#bcolor').oninput = e => { state.color = e.target.value; e.target.parentNode.querySelector('.chip').style.background = state.color; e.target.parentNode.querySelector('code').textContent = state.color.toUpperCase(); redo(); };
+  $('#mcolor').oninput = e => { state.mono = e.target.value; e.target.parentNode.querySelector('.chip').style.background = state.mono; e.target.parentNode.querySelector('code').textContent = state.mono.toUpperCase(); redo(); };
+}
+function indexHTML(fl) {
+  const lv = level();
+  let h = `<nav class="card index" aria-label="${t('index')}"><span class="eyebrow">${t('index')}</span><a href="#verdict"><span class="dot ${lv === 'ok' ? '' : lv}"></span><span class="nm">${t('verdictNav')}</span><span class="ct" style="color:var(--${lv === 'ok' ? 'ok' : lv}-ink)">${M.score.toFixed(1)}</span></a>`;
+  for (const [sec, title] of SECTIONS) { const n = secTests(sec).length, f = secFlags(sec).length; if (!n) continue;
+    h += `<a href="#s-${sec}" data-sec="${sec}" class="${f ? 'warn' : ''}"><span class="dot ${f ? 'warn' : ''}"></span><span class="nm">${t(title)}</span><span class="ct">${f ? f + ' !' : n + '/' + n}</span></a>`; }
+  return h + '</nav>';
+}
+function chipsHTML(fl) {
+  let h = fl.length ? `<a href="#t-${fl[0].id}" data-goto="${fl[0].id}" class="on">${t('fWarn', { n: fl.length })}</a>` : '';
+  for (const [sec, , , short] of SECTIONS) { if (!secTests(sec).length) continue; const f = secFlags(sec).length; h += `<a href="#s-${sec}" data-sec="${sec}">${t(short)} ${f ? '!' : '✓'}</a>`; }
+  return h;
+}
+function verdictHTML(fl, N) {
+  const lv = level(), p = rulerPos(M.minSizeRaw);
+  const okSecs = SECTIONS.filter(([s]) => secTests(s).length && !secFlags(s).length).map(([, , , short]) => t(short).toLowerCase());
+  const items = fl.map(r => { const ft = flagText(r.id); return `<a class="tc-item ${LIVE[r.id].status === 'bad' ? 'bad' : ''}" href="#t-${r.id}" data-goto="${r.id}"><span class="bang">!</span><span class="tx"><b>${t(TITLES[r.id])}</b><span>${esc(ft.what)}</span><span class="go">${t('goTest')}</span></span></a>`; }).join('');
+  const passed = fl.length ? t('passedSome', { n: N - fl.length, list: okSecs.join(', ') || '—' }) : t('passedAll', { n: N });
+  return `<section class="card verdict" id="verdict">
+    <div class="v-main"><div class="v-head"><span class="eyebrow">${t('verdictLabel')}</span><span class="pill ${lv}">${t(stampKey())}</span></div>
+      <div class="v-nums"><div class="v-thumb"><img alt="" src="${DATA.uri}"></div><div class="score"><b>${M.score.toFixed(1)}</b><span>/ 10</span></div><div class="minsize"><span>${t('minSize')}</span><b>${M.minSize} px</b></div></div>
+      <div class="ruler" role="img" aria-label="${t('minSize')}: ${M.minSize} px"><div class="track">${p > 0 ? `<div class="below" style="width:${p}%"></div>` : ''}<div class="above" style="left:${p}%"></div><div class="pin" style="left:${p}%"></div></div>
+        <div class="ticks"><span style="left:0">16</span><span style="left:25%">32</span><span style="left:50%">64</span><span style="left:75%">128</span><span style="left:100%">256 px</span></div></div>
+      <p class="lead">${verdictText()}</p></div>
+    <div class="tocheck"><div class="row-sb"><h2>${t('toCheck')}</h2><span class="lbl">${t('ofTests', { n: fl.length, t: N })}</span></div>${items}<div class="passed"><span class="tick">✓</span>${esc(passed)}</div></div>
+    <dl class="metrics">${[[t('fid16'), Math.round((1 - clamp(M.err16)) * 100) + '%'], [t('fid32'), Math.round((1 - clamp(M.err32)) * 100) + '%'], [t('parts'), M.fg256 + ' → ' + M.fg32], [t('fill'), Math.round(M.fill * 100) + '%'], [t('sym'), Math.round(M.symH * 100) + '%'], [t('neg'), Math.round(M.negRatio * 100) + '% · ' + M.holes]].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
+    <div class="fine">${t('heur')} <details class="how"><summary>${t('howT')}</summary><p>${t('howP')}</p></details></div>
+  </section>`;
+}
+function renderSections() {
+  const host = $('#secs'); if (!host) return; host.innerHTML = '';
+  for (const [sec, title, intro] of SECTIONS) {
+    let list = secTests(sec); if (!list.length) continue;
+    const f = secFlags(sec);
+    if (state.filter === 'warn') { if (!f.length) continue; list = f; }
+    const open = state.filter === 'warn' || secOpen(sec);
+    if (!open) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'fold'; b.id = 's-' + sec; b.setAttribute('aria-expanded', 'false');
+      b.innerHTML = `<span class="t">${t(title)}</span><span class="pill ok plain">${t('okCount', { a: list.length, b: list.length })}</span><span class="list">${list.map(r => t(TITLES[r.id])).join(' · ')}</span><span class="open">${t('open')}</span>`;
+      b.onclick = () => { state.opened.add(sec); state.closed.delete(sec); renderSections(); document.getElementById('s-' + sec)?.focus?.(); };
+      host.appendChild(b); continue;
+    }
+    const el = document.createElement('section'); el.className = 'card section'; el.id = 's-' + sec; el.tabIndex = -1;
+    el.innerHTML = `<div class="sh"><h2>${t(title)}</h2>${f.length ? `<span class="pill warn plain">${t('warnCount', { n: f.length })}</span>` : `<span class="pill ok plain">${t('okCount', { a: list.length, b: list.length })}</span>`}<span class="intro">${t(intro)}</span></div><div class="body"></div>`;
+    const body = el.querySelector('.body');
+    const ordered = [...list].sort((a, b) => (isFlag(LIVE[b.id].status) ? 1 : 0) - (isFlag(LIVE[a.id].status) ? 1 : 0));
+    for (const r of ordered) body.appendChild(r.id === 'src' ? srcEl() : r.id === 'kit' ? kitEl() : testEl(r.T));
+    if (state.filter === 'all' && (state.opened.has(sec) || f.length)) { const c = document.createElement('div'); c.className = 'closebar'; c.innerHTML = `<button type="button" class="linkbtn">${t('closeSec')}</button>`; c.querySelector('button').onclick = () => { state.opened.delete(sec); if (f.length) state.closed.add(sec); renderSections(); document.getElementById('s-' + sec)?.focus?.(); }; el.appendChild(c); }
+    host.appendChild(el);
+  }
+}
+function statusPill(id) { const s = LIVE[id].status; return isFlag(s) ? `<span class="pill ${s} plain">${id === 'mono' ? t('monoWarn') : t('checkPill')}</span>` : `<span class="pill ok plain">${t('okPill')}</span>`; }
+function whatFixHTML(id) { const ft = flagText(id); return `<div class="whatfix"><span><strong>${t('what')}</strong> ${esc(ft.what)}</span>${ft.fix ? `<span><strong>${t('fix')}</strong> ${esc(ft.fix)}</span>` : ''}</div>`; }
+function testEl(T) {
+  const live = LIVE[T.id], fl = isFlag(live.status);
+  const el = document.createElement('article'); el.className = 'test' + (T.wide ? ' wide' : '') + (fl ? ' flag ' + live.status : ''); el.id = 't-' + T.id;
+  el.innerHTML = `<div class="th"><h3>${t(TITLES[T.id])}</h3>${statusPill(T.id)}</div>${T.slider ? `<div class="slider"><input type="range" id="r-${T.id}" aria-label="${t(TITLES[T.id])}"><output for="r-${T.id}"></output></div>` : ''}<div class="stage"></div><div class="readout"></div>${fl ? whatFixHTML(T.id) : ''}<p class="note">${t(NOTES[T.id])}</p>`;
+  const stage = el.querySelector('.stage'), ro = el.querySelector('.readout');
+  const show = () => { stage.innerHTML = ''; if (live.canvas) { live.canvas.setAttribute('role', 'img'); live.canvas.setAttribute('aria-label', t(TITLES[T.id])); stage.appendChild(live.canvas); } else stage.textContent = live.error || ''; ro.innerHTML = (live.readout || []).map(s => `<span class="chip">${esc(s)}</span>`).join(''); ro.hidden = !ro.innerHTML; };
+  if (T.seg) { const seg = document.createElement('div'); seg.className = 'seg small'; seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', t(TITLES[T.id]));
+    T.seg.forEach((k, i) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = t(k); b.setAttribute('aria-pressed', i === live.opt); b.onclick = () => { live.opt = i; seg.querySelectorAll('button').forEach((x, j) => x.setAttribute('aria-pressed', j === i)); drawTest(T); show(); }; seg.appendChild(b); });
+    el.querySelector('.th').appendChild(seg); }
+  if (T.slider) { const r = el.querySelector('input[type=range]'), o = el.querySelector('output'); Object.assign(r, { min: T.slider.min, max: T.slider.max, step: T.slider.step, value: live.val });
+    r.oninput = () => { live.val = +r.value; o.textContent = T.out(live.val); drawTest(T); show(); }; o.textContent = T.out(live.val); }
+  show(); return el;
+}
+function srcEl() {
+  const si = LIVE.src.info, fl = isFlag(LIVE.src.status), el = document.createElement('article'); el.className = 'test' + (fl ? ' flag warn' : ''); el.id = 't-src';
+  el.innerHTML = `<div class="th"><h3>${t('tSrc')}</h3>${statusPill('src')}<button type="button" class="btn" id="copysvg">${t('copy')}</button></div><pre class="src"></pre><div class="readout"><span class="chip">${si.kb} KB</span><span class="chip">${si.els} path</span><span class="chip">${si.live ? t('live') : t('noLive')}</span><span class="chip">${si.img ? t('img') : t('noImg')}</span></div>${fl ? whatFixHTML('src') : ''}<p class="note">${t('nSrc')}</p>`;
+  el.querySelector('pre').textContent = DATA.svg;
+  el.querySelector('#copysvg').onclick = e => navigator.clipboard.writeText(DATA.svg).then(() => { e.target.textContent = t('copied'); }, () => { const r = document.createRange(); r.selectNodeContents(el.querySelector('pre')); getSelection().removeAllRanges(); getSelection().addRange(r); });
   return el;
 }
-
-function testEl(T, grid) {
-  const live = LIVE[T.id] || (LIVE[T.id] = { opt: 0, val: T.slider ? T.slider.value : 0 }); live.info = {};
-  const el = document.createElement('article'); el.className = 'test' + (T.wide ? ' wide' : ''); el.id = 't-' + T.id;
-  el.innerHTML = `<header><h3>${t(TITLES[T.id])}</h3></header>${T.slider ? '<div class="slider"><input type="range"><output></output></div>' : ''}<div class="stage"></div><footer><div class="readout"></div><p class="note">${t(NOTES[T.id])}</p></footer>`;
-  grid.appendChild(el);
-  const stage = el.querySelector('.stage'), ro = el.querySelector('.readout');
-  const paint = () => { let cv; try { cv = T.draw({ opt: live.opt, val: live.val, info: live.info }); } catch (e) { stage.textContent = e.message; return; }
-    live.canvas = cv; stage.innerHTML = ''; stage.appendChild(cv);
-    const st = T.status ? T.status(live.info) : null; const chips = (T.readout ? T.readout(live.info) : []).map(s => `<span class="chip">${esc(s)}</span>`).join('');
-    ro.innerHTML = (st ? `<span class="pill ${st}">${st === 'ok' ? 'OK' : '!'}</span>` : '') + chips; ro.hidden = !ro.innerHTML; live.status = st; live.readout = T.readout ? T.readout(live.info) : []; };
-  if (T.seg) { const seg = document.createElement('div'); seg.className = 'seg'; seg.setAttribute('role', 'group');
-    T.seg.forEach((k, i) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = t(k); b.setAttribute('aria-pressed', i === live.opt); b.onclick = () => { live.opt = i; seg.querySelectorAll('button').forEach((x, j) => x.setAttribute('aria-pressed', j === i)); paint(); }; seg.appendChild(b); });
-    el.querySelector('header').appendChild(seg); }
-  if (T.slider) { const r = el.querySelector('input[type=range]'), o = el.querySelector('output'); Object.assign(r, { min: T.slider.min, max: T.slider.max, step: T.slider.step, value: live.val }); r.id = 'r-' + T.id;
-    const upd = () => { live.val = +r.value; o.textContent = T.out(live.val); paint(); }; r.oninput = upd; o.textContent = T.out(live.val); }
-  paint(); return live.status;
+function kitEl() {
+  const el = document.createElement('article'); el.className = 'test'; el.id = 't-kit';
+  el.innerHTML = `<div class="th"><h3>${t('tKit')}</h3>${statusPill('kit')}</div><div class="kitrow"><span>${t('kitRow')}</span><button type="button" class="btn">${t('zip')}</button></div><p class="note">${t('nKit')}</p>`;
+  el.querySelector('.kitrow button').onclick = downloadKit; return el;
 }
 
-function fileTests(grid) {
-  if (DATA.svg) { const el = document.createElement('article'); el.className = 'test';
-    const live = /<text[\s>]/.test(DATA.svg), img = /<image[\s>]/.test(DATA.svg);
-    el.innerHTML = `<header><h3>${t('tSrc')}</h3><button class="btn" type="button" id="copysvg">${t('copy')}</button></header><pre class="src"></pre><footer><div class="readout"><span class="pill ${live || img ? 'warn' : 'ok'}">${live || img ? '!' : 'OK'}</span><span class="chip">${(DATA.svg.length / 1024).toFixed(1)} KB</span><span class="chip">${(DATA.svg.match(/<path/g) || []).length} path</span><span class="chip">${live ? t('live') : t('noLive')}</span><span class="chip">${img ? t('img') : t('noImg')}</span></div><p class="note">${t('nSrc')}</p></footer>`;
-    el.querySelector('pre').textContent = DATA.svg; grid.appendChild(el);
-    el.querySelector('#copysvg').onclick = e => navigator.clipboard.writeText(DATA.svg).then(() => { e.target.textContent = t('copied'); }, () => { const r = document.createRange(); r.selectNodeContents(el.querySelector('pre')); getSelection().removeAllRanges(); getSelection().addRange(r); }); }
-  const el = document.createElement('article'); el.className = 'test';
-  const base = (state.name || 'logo').toLowerCase().replace(/[^a-z0-9]+/g, '_') || 'logo';
-  el.innerHTML = `<header><h3>${t('tKit')}</h3></header><div class="kit"></div><footer><p class="note">${t('nKit')}</p></footer>`; grid.appendChild(el);
-  const kit = el.querySelector('.kit'), dl = (cv, name) => { const a = document.createElement('a'); a.download = name; a.href = cv.toDataURL('image/png'); a.click(); };
-  const icon = (s) => { const c = canvas(s), x = c.getContext('2d'); x.fillStyle = '#ffffff'; x.fillRect(0, 0, s, s); drawLogo(x, s * .16, s * .16, s * .68, s * .68); return c; };
-  const jobs = [...[16, 32, 48, 64, 128, 256, 512, 1024].map(s => [s + ' px', () => dl(logoCanvas(s, null, Math.round(s * .06)), `${base}_${s}.png`)]), ['apple-touch-icon', () => dl(icon(180), 'apple-touch-icon.png')], ['icon-192', () => dl(icon(192), 'icon-192.png')], ['icon-512', () => dl(icon(512), 'icon-512.png')]];
-  for (const [l, f] of jobs) { const b = document.createElement('button'); b.className = 'btn'; b.type = 'button'; b.textContent = l; b.onclick = f; kit.appendChild(b); }
-  const all = document.createElement('button'); all.className = 'btn primary'; all.type = 'button'; all.textContent = t('all'); all.onclick = () => jobs.forEach(([, f], i) => setTimeout(f, i * 220)); kit.appendChild(all);
+// ---------------- PNG kit (.zip, stored, no compression) ----------------
+const CRC = (() => { const tb = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; tb[n] = c >>> 0; } return tb; })();
+function crc32(u) { let c = 0xFFFFFFFF; for (let i = 0; i < u.length; i++) c = CRC[(c ^ u[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function makeZip(files) { // files: [{ name, bytes: Uint8Array }]
+  const enc = new TextEncoder(), parts = [], central = []; let off = 0;
+  const u16 = v => [v & 255, v >>> 8 & 255], u32 = v => [v & 255, v >>> 8 & 255, v >>> 16 & 255, v >>> 24 & 255];
+  for (const f of files) { const nm = enc.encode(f.name), crc = crc32(f.bytes), sz = f.bytes.length;
+    const head = new Uint8Array([...u32(0x04034b50), ...u16(20), ...u16(0), ...u16(0), ...u16(0), ...u16(33), ...u32(crc), ...u32(sz), ...u32(sz), ...u16(nm.length), ...u16(0)]);
+    parts.push(head, nm, f.bytes);
+    central.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0), ...u16(0), ...u16(0), ...u16(33), ...u32(crc), ...u32(sz), ...u32(sz), ...u16(nm.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off)]), nm);
+    off += head.length + nm.length + sz; }
+  const cdSize = central.reduce((a, b) => a + b.length, 0);
+  return new Blob([...parts, ...central, new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(files.length), ...u16(files.length), ...u32(cdSize), ...u32(off), ...u16(0)])], { type: 'application/zip' });
+}
+const pngBytes = cv => new Promise(res => cv.toBlob(b => b.arrayBuffer().then(a => res(new Uint8Array(a))), 'image/png'));
+function slug() { return (state.name || 'logo').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'logo'; }
+function download(blob, name) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+async function downloadKit() {
+  const base = slug(), files = [];
+  for (const s of [16, 32, 48, 64, 128, 256, 512, 1024]) files.push({ name: `${base}-${s}.png`, bytes: await pngBytes(logoCanvas(s, null, Math.round(s * .06))) });
+  const tile = s => { const c = canvas(s), x = c.getContext('2d'); x.fillStyle = '#ffffff'; x.fillRect(0, 0, s, s); drawLogo(x, s * .16, s * .16, s * .68, s * .68); return c; };
+  for (const [s, n] of [[180, 'apple-touch-icon.png'], [192, 'icon-192.png'], [512, 'icon-512.png']]) files.push({ name: n, bytes: await pngBytes(tile(s)) });
+  download(makeZip(files), base + '-png-kit.zip'); toast(t('zipMade'));
 }
 
+// ---------------- export panel ----------------
+let lastFocus = null;
+function openExport() { lastFocus = document.activeElement; renderExport(); $('#exback').hidden = false; document.body.style.overflow = 'hidden'; requestAnimationFrame(() => $('#exback [role=radio][aria-checked=true]')?.focus()); }
+function closeExport() { $('#exback').hidden = true; $('#exback').innerHTML = ''; document.body.style.overflow = ''; lastFocus?.focus?.(); }
+function thumb(cv, w = 240) { const k = w / cv.width, c = canvas(w, Math.round(cv.height * k)), x = c.getContext('2d'); x.drawImage(cv, 0, 0, c.width, c.height); return c.toDataURL('image/jpeg', .75); }
+function previewDesigner() {
+  const lim = M.minSizeRaw > 16 ? M.limit : null, fl = flagged();
+  const mets = [[t('thin'), pctOfMark(M.tInk), lim === 'strokes'], [t('gap'), pctOfMark(M.tGap), lim === 'gaps'], [t('fid16'), Math.round((1 - clamp(M.err16)) * 100) + '%'], [t('fid32'), Math.round((1 - clamp(M.err32)) * 100) + '%'],
+    [t('parts'), M.fg256 + ' → ' + M.fg32], [t('fill'), Math.round(M.fill * 100) + '%'], [t('sym'), Math.round(M.symH * 100) + '%'], [t('neg'), Math.round(M.negRatio * 100) + '% · ' + M.holes]];
+  return `<div class="pm">${mets.map(([a, b, hi]) => `<div class="${hi ? 'hi' : ''}">${esc(a)}<b>${esc(b)}</b></div>`).join('')}</div>
+    <div class="pk"><b>${t('toCheck')} · ${fl.length}</b>${fl.slice(0, 4).map(r => `<div><b>${esc(t(TITLES[r.id]))}</b> — ${esc(flagText(r.id).what)}</div>`).join('')}</div>`;
+}
+function renderExport() {
+  const d = state.mode === 'designer', pages = d ? 4 : 2;
+  const inc = [['incVerdict', true, true], ['incScore', true, false], ['incCtx', true, true], ['incTech', true, false], ['incNote', false, true]];
+  const ids = ['tabs', 'card', 'bill', 'mat', 'mono', 'pat'].filter(id => LIVE[id] && LIVE[id].canvas);
+  const today = new Date().toLocaleDateString(LANG === 'it' ? 'it-IT' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  $('#exback').innerHTML = `<div class="ex-prev"><span class="eyebrow">${t('previewOf', { n: pages })}</span>
+      <div class="page1" aria-hidden="true"><div class="ph"><b>${esc(state.studio || 'Logo Lab')}</b><span>${d ? t('rTech') : ''} · ${today}</span></div>
+        <div class="pt"><img alt="" src="${DATA.uri}"><div><b>${esc(state.name)}</b><span>${d ? t('subDesigner', { n: RES.length }) : t('subClient')}</span></div></div>
+        ${d ? `<div class="pv"><span><span class="s">${M.score.toFixed(1)}</span> <small>/ 10</small></span><span><small>${t('minSize')}</small><br><b style="font-size:18px">${M.minSize} px</b></span></div>`
+            : `<div class="pv" style="flex-direction:column;align-items:flex-start;gap:4px"><small>${t('usePx')}</small><span class="s" style="font-size:32px">${M.minSize} px</span></div>${state.note.trim() ? `<div class="pn"><b>${t('noteL')}</b><br>${esc(state.note.trim())}</div>` : ''}`}
+        ${d ? previewDesigner() : `<div class="pg">${ids.map(id => `<img alt="" src="${thumb(LIVE[id].canvas)}">`).join('')}</div>`}</div></div>
+    <aside class="ex-panel" role="dialog" aria-modal="true" aria-labelledby="exh">
+      <div class="ex-head"><h2 id="exh">${t('exTitle')}</h2><button type="button" class="iconbtn" id="exclose" aria-label="${t('close')}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="ex-body">
+        <div class="field" style="gap:10px"><span id="forwho">${t('forWho')}</span><div class="radio2" role="radiogroup" aria-labelledby="forwho">
+          <button type="button" role="radio" data-mode="designer" aria-checked="${d}"><b>${t('forMe')}</b><span>${t('forMeP')}</span></button>
+          <button type="button" role="radio" data-mode="client" aria-checked="${!d}"><b>${t('forClient')}</b><span>${t('forClientP')}</span></button></div></div>
+        <label class="field">${t('studio')}<input type="text" id="exstudio" value="${esc(state.studio)}" placeholder="${t('studioPh')}"></label>
+        ${d ? '' : `<label class="field">${t('noteL')}<textarea id="exnote" rows="3" placeholder="${t('notePh')}">${esc(state.note)}</textarea></label>`}
+        <div class="field" style="gap:8px"><span>${t('includes')}</span><ul class="inc">${inc.map(([k, a, b]) => { const on = d ? a : b; return `<li class="${on ? '' : 'off'}"><span class="bx">${on ? '✓' : ''}</span>${t(k)}</li>`; }).join('')}</ul></div>
+        <div class="kitrow"><span>${t('kitRow')}</span><button type="button" class="btn" id="exzip">${t('zip')}</button></div>
+      </div>
+      <div class="ex-foot"><span>${t('pagesInfo', { n: pages })}</span><button type="button" class="btn primary" id="exgo">${ICON_UP.replace('M12 16V4m0 0-4 4m4-4 4 4', 'M12 4v12m0 0 4-4m-4 4-4-4')}${d ? t('dlPdf') : t('dlPdfClient')}</button></div>
+    </aside>`;
+  const back = $('#exback');
+  back.onclick = e => { if (e.target === back || e.target.classList.contains('ex-prev')) closeExport(); };
+  $('#exclose').onclick = closeExport;
+  back.querySelectorAll('[role=radio]').forEach(b => b.onclick = () => { state.mode = b.dataset.mode; renderExport(); back.querySelector(`[data-mode=${state.mode}]`).focus(); });
+  back.querySelector('[role=radiogroup]').onkeydown = e => { if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) { e.preventDefault(); state.mode = state.mode === 'designer' ? 'client' : 'designer'; renderExport(); back.querySelector(`[data-mode=${state.mode}]`).focus(); } };
+  $('#exstudio').oninput = e => { state.studio = e.target.value; try { localStorage.setItem('logolab-studio', state.studio); } catch (er) {} back.querySelector('.page1 .ph b').textContent = state.studio || 'Logo Lab'; };
+  if ($('#exnote')) $('#exnote').oninput = e => { state.note = e.target.value; };
+  $('#exzip').onclick = downloadKit;
+  $('#exgo').onclick = () => exportPdf(state.mode);
+  back.onkeydown = e => { if (e.key === 'Escape') closeExport(); if (e.key === 'Tab') { const f = [...back.querySelectorAll('.ex-panel button, .ex-panel input, .ex-panel textarea')]; if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } } };
+}
 // ---------------- PDF export (self-contained writer: Helvetica text + JPEG figures) ----------------
 const WINANSI = { 0x20AC: 0x80, 0x201A: 0x82, 0x0192: 0x83, 0x201E: 0x84, 0x2026: 0x85, 0x2020: 0x86, 0x2021: 0x87, 0x02C6: 0x88, 0x2030: 0x89, 0x0160: 0x8A, 0x2039: 0x8B, 0x0152: 0x8C, 0x017D: 0x8E, 0x2018: 0x91, 0x2019: 0x92, 0x201C: 0x93, 0x201D: 0x94, 0x2022: 0x95, 0x2013: 0x96, 0x2014: 0x97, 0x02DC: 0x98, 0x2122: 0x99, 0x0161: 0x9A, 0x203A: 0x9B, 0x0153: 0x9C, 0x017E: 0x9E, 0x0178: 0x9F };
 function winAnsi(s) { s = String(s).replace(/→/g, '->').replace(/≥/g, '>=').replace(/≤/g, '<=').replace(/✓/g, 'OK').replace(/≈/g, '~').replace(/ | /g, ' ');
@@ -819,79 +1185,216 @@ function buildPdf(pages) { // pages: [{ ops: string (latin1), images: [{ name, i
   buildPdf.last = parts; return new Blob(parts, { type: 'application/pdf' });
 }
 
-function exportPdf(dry) {
-  if (!DATA || M.empty) return;
-  const PW = 595.28, PH = 841.89, MX = 44; const rgb = h => hexToRgb(h).map(v => (v / 255).toFixed(3)).join(' ');
-  const C = { ink: '#15171c', muted: '#646b78', rule: '#dadee5', accent: '#d0126c', ok: '#12784f', warn: '#a65f00', bad: '#c0261b' };
-  const pages = []; let ops = '', imgs = [], n = 0, y = 0;
-  const T = (s, x, yy, size = 10, font = 'F1', color = C.ink) => { ops += `BT /${font} ${size} Tf ${rgb(color)} rg ${x.toFixed(2)} ${(PH - yy).toFixed(2)} Td ${pdfStr(s)} Tj ET\n`; };
-  const R = (x, yy, w, h, color, stroke) => { ops += stroke ? `${rgb(color)} RG 0.6 w ${x.toFixed(2)} ${(PH - yy - h).toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re S\n` : `${rgb(color)} rg ${x.toFixed(2)} ${(PH - yy - h).toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re f\n`; };
-  const IM = (cv, x, yy, w) => { const img = jpegOf(cv), h = w * img.h / img.w, name = 'Im' + (++n); imgs.push({ name, img }); ops += `q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${x.toFixed(2)} ${(PH - yy - h).toFixed(2)} cm /${name} Do Q\n`; return h; };
-  const para = (s, x, yy, width, size = 10, font = 'F1', color = C.ink, lh = 1.42) => { const lines = wrap(s, size, width, font === 'F2'); lines.forEach((l, i) => T(l, x, yy + i * size * lh, size, font, color)); return lines.length * size * lh; };
+
+// ---------------- PDF reports (designer: 4 pages, client: 2 pages) ----------------
+function pdfKit() {
+  const PW = 595.28, PH = 841.89, MX = 42, CW = PW - 2 * MX;
+  const C = { ink: '#15171c', ink2: '#3a3f49', muted: '#646b78', rule: '#dadee5', rule2: '#c5cad3', soft: '#f6f7f9', accent: '#d0126c', accentSoft: '#fdf3f7',
+    ok: '#12784f', okSoft: '#dff3ea', okInk: '#0e5f3f', warn: '#a65f00', warnSoft: '#fbefdc', warnInk: '#8a4f00', warnLine: '#f0d3a6', warnBg: '#fffaf2', bad: '#c0261b', badSoft: '#fbe4e1', badInk: '#9c1f16', badLine: '#f2c6c1', badBg: '#fdf6f5', warm: '#f4f1ec' };
+  const rgb = h => hexToRgb(h).map(v => (v / 255).toFixed(3)).join(' ');
+  const f = n => n.toFixed(2);
+  const k = { pages: [], ops: '', imgs: [], n: 0, PW, PH, MX, CW, C };
+  k.T = (s, x, y, size = 10, font = 'F1', color = C.ink) => { k.ops += `BT /${font} ${size} Tf ${rgb(color)} rg ${f(x)} ${f(PH - y)} Td ${pdfStr(s)} Tj ET\n`; };
+  k.TR = (s, x, y, size, font, color) => k.T(s, x - textW(s, size, font === 'F2'), y, size, font, color); // right-aligned
+  k.TC = (s, cx, y, size, font, color) => k.T(s, cx - textW(s, size, font === 'F2') / 2, y, size, font, color);
+  k.R = (x, y, w, h, color) => { k.ops += `${rgb(color)} rg ${f(x)} ${f(PH - y - h)} ${f(w)} ${f(h)} re f\n`; };
+  const rr = (x, y, w, h, r) => { r = Math.min(r, w / 2, h / 2); const X = x, Y = PH - y - h, q = .5523 * r;
+    return `${f(X + r)} ${f(Y)} m ${f(X + w - r)} ${f(Y)} l ${f(X + w - r + q)} ${f(Y)} ${f(X + w)} ${f(Y + r - q)} ${f(X + w)} ${f(Y + r)} c ${f(X + w)} ${f(Y + h - r)} l ${f(X + w)} ${f(Y + h - r + q)} ${f(X + w - r + q)} ${f(Y + h)} ${f(X + w - r)} ${f(Y + h)} c ${f(X + r)} ${f(Y + h)} l ${f(X + r - q)} ${f(Y + h)} ${f(X)} ${f(Y + h - r + q)} ${f(X)} ${f(Y + h - r)} c ${f(X)} ${f(Y + r)} l ${f(X)} ${f(Y + r - q)} ${f(X + r - q)} ${f(Y)} ${f(X + r)} ${f(Y)} c h `; };
+  k.RR = (x, y, w, h, r, fill, stroke, lw = .75, dash) => { k.ops += (dash ? `[${dash}] 0 d ` : '') + (fill ? `${rgb(fill)} rg ` : '') + (stroke ? `${rgb(stroke)} RG ${lw} w ` : '') + rr(x, y, w, h, r) + (fill && stroke ? 'B' : fill ? 'f' : 'S') + (dash ? ' [] 0 d' : '') + '\n'; };
+  const circ = (cx, cy, r) => { const Y = PH - cy, q = .5523 * r; return `${f(cx + r)} ${f(Y)} m ${f(cx + r)} ${f(Y + q)} ${f(cx + q)} ${f(Y + r)} ${f(cx)} ${f(Y + r)} c ${f(cx - q)} ${f(Y + r)} ${f(cx - r)} ${f(Y + q)} ${f(cx - r)} ${f(Y)} c ${f(cx - r)} ${f(Y - q)} ${f(cx - q)} ${f(Y - r)} ${f(cx)} ${f(Y - r)} c ${f(cx + q)} ${f(Y - r)} ${f(cx + r)} ${f(Y - q)} ${f(cx + r)} ${f(Y)} c h `; };
+  k.CIRC = (cx, cy, r, fill, stroke, lw = 1) => { k.ops += (fill ? `${rgb(fill)} rg ` : '') + (stroke ? `${rgb(stroke)} RG ${lw} w ` : '') + circ(cx, cy, r) + (fill && stroke ? 'B' : fill ? 'f' : 'S') + '\n'; };
+  k.LINE = (x1, y1, x2, y2 = y1, color = C.rule, lw = .75) => { k.ops += `${rgb(color)} RG ${lw} w ${f(x1)} ${f(PH - y1)} m ${f(x2)} ${f(PH - y2)} l S\n`; };
+  // the Logo Lab mark (direction A, "Mirino"), drawn as vectors: s = size in pt
+  k.MARK = (x, y, s, ink = C.ink, accent = C.accent) => { const u = s / 48;
+    k.CIRC(x + 24 * u, y + 24 * u, 12.5 * u, null, ink, 4.5 * u);
+    for (const [rx, ry, w, h] of [[21.75, 1, 4.5, 7.5], [21.75, 39.5, 4.5, 7.5], [1, 21.75, 7.5, 4.5], [39.5, 21.75, 7.5, 4.5]]) k.RR(x + rx * u, y + ry * u, w * u, h * u, u, ink);
+    k.CIRC(x + 24 * u, y + 24 * u, 4 * u, accent); };
+  // images: drawn to fit inside the box (contain), centred; returns the drawn rectangle
+  k.IM = (cv, x, y, w, h, bg) => { if (!cv) return; const ar = cv.width / cv.height; let dw = w, dh = w / ar; if (h && dh > h) { dh = h; dw = h * ar; }
+    const src = bg ? (() => { const c2 = canvas(cv.width, cv.height), x2 = c2.getContext('2d'); x2.fillStyle = bg; x2.fillRect(0, 0, c2.width, c2.height); x2.drawImage(cv, 0, 0); return c2; })() : cv;
+    const img = jpegOf(src), name = 'Im' + (++k.n), dx = x + (w - dw) / 2, dy = y + ((h || dh) - dh) / 2; k.imgs.push({ name, img });
+    k.ops += `q ${f(dw)} 0 0 ${f(dh)} ${f(dx)} ${f(PH - dy - dh)} cm /${name} Do Q\n`; return { x: dx, y: dy, w: dw, h: dh }; };
+  k.P = (s, x, y, width, size = 10, font = 'F1', color = C.ink2, lh = 1.45) => { const lines = wrap(s, size, width, font === 'F2'); lines.forEach((l, i) => k.T(l, x, y + i * size * lh, size, font, color)); return lines.length * size * lh; };
+  // mixed bold lead + regular text in one paragraph
+  k.PB = (bold, rest, x, y, width, size = 10, color = C.ink2, lh = 1.45) => { const words = (bold + ' ' + rest).split(/\s+/), nb = bold.split(/\s+/).length; let line = [], cy = y, lines = 0;
+    // one BT block per line: the PDF viewer advances the pen with the real font metrics, so bold and regular runs never overlap
+    const flush = () => { let ops = `BT ${f(x)} ${f(PH - cy)} Td `, cur = null; line.forEach(([w, b], i) => { if (b !== cur) { ops += `/${b ? 'F2' : 'F1'} ${size} Tf ${rgb(b ? C.ink : color)} rg `; cur = b; } ops += `${pdfStr((i && !/^[:;,.]/.test(w) ? ' ' : '') + w)} Tj `; }); k.ops += ops + 'ET\n'; cy += size * lh; lines++; line = []; };
+    words.forEach((w, i) => { const b = i < nb, test = line.map(l => l[0]).concat(w).join(' '); if (textW(test, size, true) > width && line.length) flush(); line.push([w, b]); }); if (line.length) flush(); return lines * size * lh; };
+  k.PILL = (s, x, y, kind) => { const fg = { ok: C.okInk, warn: C.warnInk, bad: C.badInk, accent: C.accentInk || '#9e0d52' }[kind], bg = { ok: C.okSoft, warn: C.warnSoft, bad: C.badSoft, accent: C.accentSoft }[kind];
+    const w = textW(s, 8.5, true) + 16; k.RR(x, y, w, 17, 8.5, bg); k.T(s, x + 8, y + 11.8, 8.5, 'F2', fg); return w; };
+  k.page = (footL, footR) => { k.LINE(MX, PH - 40, PW - MX, PH - 40); k.T(footL, MX, PH - 26, 7.5, 'F1', C.muted); k.TR(footR, PW - MX, PH - 26, 7.5, 'F1', C.muted); k.pages.push({ ops: k.ops, images: k.imgs }); k.ops = ''; k.imgs = []; };
+  return k;
+}
+// a canvas with the logo on a background, for tiles in the reports
+function logoTile(w, h, bg, color, scale = .7) { const c = canvas(w, h), x = c.getContext('2d'); x.fillStyle = bg; x.fillRect(0, 0, w, h); const s = Math.min(w, h) * scale; drawLogo(x, (w - s) / 2, (h - s) / 2, s, s, color); return c; }
+function crisp(size, zoom) { const sm = logoCanvas(size, null, Math.round(size * .06)), c = canvas(size * zoom), x = c.getContext('2d'); x.fillStyle = '#ffffff'; x.fillRect(0, 0, c.width, c.height); x.imageSmoothingEnabled = false; x.drawImage(sm, 0, 0, c.width, c.height); return c; }
+function ladderCanvas() {
+  const sizes = [128, 64, 48, 32, 24, 16], c = canvas(1400, 340), x = c.getContext('2d'); x.fillStyle = '#f6f7f9'; x.fillRect(0, 0, 1400, 340);
+  let px = 60; const base = 270;
+  for (const s of sizes) { const d = s * 2; drawLogo(x, px, base - d, d, d); const below = s < M.minSize;
+    x.font = `500 22px ${MONO}`; x.textAlign = 'center'; x.fillStyle = below ? '#9c1f16' : '#646b78'; x.fillText(s + ' px ' + (below ? '✕' : '✓'), px + d / 2, base + 46); px += d + 110; }
+  return c;
+}
+function blurCanvas(r) { const c = canvas(400, 300), x = c.getContext('2d'); x.fillStyle = '#f6f7f9'; x.fillRect(0, 0, 400, 300); x.filter = `blur(${r}px)`; drawLogo(x, 110, 60, 180, 180); x.filter = 'none'; return c; }
+function nextSteps() {
+  const out = [], fl = id => LIVE[id] && isFlag(LIVE[id].status);
+  if (M.minSize > 64) out.push([t('nxSmall'), t('nxSmallP', { s: M.minSize })]);
+  else if (M.minSize > 24) out.push([t('nxCheck32'), t('nxCheck32P', { s: M.minSize })]);
+  if (fl('mono')) out.push([t('nxMono'), t('nxMonoP')]);
+  if (fl('curv')) out.push([t('nxCurv'), t('nxCurvP', { n: LIVE.curv.info.kinks })]);
+  if (fl('weight')) out.push([t('nxWeight'), t('nxWeightP')]);
+  if (fl('src')) out.push([t('nxSrc'), t('nxSrcP')]);
+  if (M.minSize > 64) out.push([t('nxRules'), t('nxRulesP', { s: M.minSize })]);
+  out.push(['', t('nxRetest')]);
+  return out;
+}
+const SEC_PAGE = { leg: 2, form: 3, ctx: 3, rep: 4, file: 4 };
+
+function designerPages(k) {
+  const { C, MX, CW, PH } = k, N = RES.length, fl = flagged(), lv = level(), studio = state.studio.trim();
   const date = new Date().toLocaleDateString(LANG === 'it' ? 'it-IT' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-  const footer = () => { R(MX, PH - 40, PW - 2 * MX, .6, C.rule); T(t('pdfGen', { d: date }), MX, PH - 26, 7.5, 'F1', C.muted); T(t('pdfPage', { n: pages.length + 1 }), PW - MX - 40, PH - 26, 7.5, 'F1', C.muted); };
-  const newPage = () => { footer(); pages.push({ ops, images: imgs }); ops = ''; imgs = []; y = 56; };
+  const foot = n => k.page(t('heur'), `${n} / 4`);
+  const head2 = () => { k.T(state.name, MX, 52, 9, 'F2'); k.T('  · ' + t('rReport'), MX + textW(state.name, 9, true), 52, 9, 'F1', C.muted); k.TR(studio || 'Logo Lab', MX + CW, 52, 9, 'F1', C.muted); k.LINE(MX, 62, MX + CW); };
+  const secHead = (sec, y) => { const [, title, intro] = SECTIONS.find(s => s[0] === sec), n = secTests(sec).length, nf = secFlags(sec).length;
+    k.T(t(title), MX, y + 20, 20, 'F2'); const w = textW(t(title), 20, true) * 1.1; k.PILL(nf ? t('warnCount', { n: nf }) : t('okCount', { a: n, b: n }), MX + w + 12, y + 6, nf ? 'warn' : 'ok');
+    k.T(t(intro), MX, y + 38, 9, 'F1', C.muted); return y + 52; };
+  const status = id => !LIVE[id] ? null : isFlag(LIVE[id].status) ? 'warn' : 'ok';
+  const tileGrid = (ids, y, cols, tileH) => { const gap = 12, w = (CW - gap * (cols - 1)) / cols; let rowY = y, maxB = y;
+    ids.filter(id => LIVE[id] && LIVE[id].canvas).forEach((id, i) => { const cx = MX + (i % cols) * (w + gap); if (i && i % cols === 0) rowY = maxB + 12;
+      const fl = isFlag(LIVE[id].status); k.RR(cx, rowY, w, tileH, 6, fl ? C.warnBg : C.soft, fl ? C.warnLine : null); k.IM(LIVE[id].canvas, cx + 4, rowY + 4, w - 8, tileH - 8);
+      k.T((fl ? '! ' : '') + t(TITLES[id]), cx, rowY + tileH + 13, 9, 'F2', fl ? C.warnInk : C.ink);
+      const sub = (LIVE[id].readout && LIVE[id].readout[0]) || ''; const h = sub ? k.P(sub, cx, rowY + tileH + 25, w, 7.5, 'F3', C.ink2, 1.3) : 0;
+      maxB = Math.max(maxB, rowY + tileH + 25 + h); });
+    return maxB; };
 
-  // page 1: verdict
-  T(state.studio ? state.studio.toUpperCase() : 'LOGO LAB', MX, 56, 8, 'F2', C.accent); T(state.studio ? t('pdfTitle') : t('pdfTitle'), MX + textW(state.studio ? state.studio.toUpperCase() : 'LOGO LAB', 8, true) + 12, 56, 8, 'F1', C.muted);
-  T(state.sample ? t('sampleTag') : (state.name || DATA.file), MX, 88, 24, 'F2'); T(`${t('pdfFile')}: ${DATA.file}  ·  ${date}`, MX, 106, 9, 'F1', C.muted);
-  const spec = canvas(900, 900), sx = spec.getContext('2d'); sx.fillStyle = '#fff'; sx.fillRect(0, 0, 900, 900); drawLogo(sx, 170, 170, 560, 560);
-  sx.strokeStyle = '#d0126c'; sx.lineWidth = 3; for (const [a, b, dx, dy] of [[40, 40, 1, 1], [860, 40, -1, 1], [40, 860, 1, -1], [860, 860, -1, -1]]) { sx.beginPath(); sx.moveTo(a, b + 60 * dy); sx.lineTo(a, b); sx.lineTo(a + 60 * dx, b); sx.stroke(); }
-  R(MX - .5, 129.5, 221, 221, C.rule, true); IM(spec, MX, 130, 220);
-  const lv = level(), lc = C[lv]; const vx = MX + 244;
-  if (state.client) { T(t('minSize').toUpperCase(), vx, 142, 8, 'F2', C.muted); T(M.minSize + ' px', vx, 196, 46, 'F2', lc); } else { T(t('scal').toUpperCase(), vx, 142, 8, 'F2', C.muted); T(M.score.toFixed(1), vx, 196, 46, 'F2', lc); T('/ 10', vx + textW(M.score.toFixed(1), 46, true) + 6, 196, 14, 'F1', C.muted); }
-  if (state.client) T(t(stampKey()), vx, 240, 12, 'F2', lc); else { T(t('minSize').toUpperCase(), vx, 224, 8, 'F2', C.muted); T(M.minSize + ' px', vx, 246, 20, 'F2'); T(t(stampKey()), vx + 90, 244, 10, 'F2', lc); }
-  // ruler
-  const rx = vx, rw = PW - MX - vx, pos = v => rx + (Math.log2(clamp(v, 16, 256)) - 4) / 4 * rw;
-  R(rx, 268, rw, 6, '#eef0f3'); R(pos(M.minSizeRaw), 268, rx + rw - pos(M.minSizeRaw), 6, C.ok); R(pos(M.minSizeRaw) - .8, 262, 1.6, 18, C.accent);
-  for (const s of [16, 24, 32, 48, 64, 128, 256]) T(String(s), pos(s) - textW(String(s), 7) / 2, 290, 7, 'F3', C.muted);
-  y = 312; y += para(verdictText(), vx, y, rw, 9.5) + 6;
-  y = Math.max(y, 372);
-  if (state.studio) { T(t('prepared', { s: state.studio }), MX, 368, 8.5, 'F1', C.muted); }
-  if (state.note.trim()) { y += 4; T(t('noteH').toUpperCase(), MX, y + 10, 8, 'F2', C.accent); y += 22; y += para(state.note.trim(), MX, y, PW - 2 * MX, 10) + 10; }
-  // measures + stats table
-  const rows = [[t('thin'), pctOfMark(M.tInk) + ' ' + t('ofMark') + (M.limit === 'strokes' && M.minSizeRaw > 16 ? ' · ' + t('limiting') : '')], [t('gap'), pctOfMark(M.tGap) + ' ' + t('ofMark') + (M.limit === 'gaps' && M.minSizeRaw > 16 ? ' · ' + t('limiting') : '')],
-    [t('fid16'), Math.round((1 - clamp(M.err16)) * 100) + '%'], [t('fid32'), Math.round((1 - clamp(M.err32)) * 100) + '%'], [t('parts'), M.fg256 + ' -> ' + M.fg32], [t('fill'), Math.round(M.fill * 100) + '%'], [t('sym'), Math.round(M.symH * 100) + '%'], [t('neg'), Math.round(M.negRatio * 100) + '% · ' + M.holes + ' ' + t(M.holes === 1 ? 'counter' : 'counters')]];
-  const colW = (PW - 2 * MX) / 2; if (state.client) rows.splice(2);
-  rows.forEach(([k, v], i) => { const cx = MX + (i % 2) * colW, cy = y + ((i / 2) | 0) * 34; R(cx, cy, colW - 12, .6, C.rule); T(k, cx, cy + 14, 8.5, 'F1', C.muted); T(v, cx, cy + 27, 10, 'F3'); });
-  y += Math.ceil(rows.length / 2) * 34 + 14; y += para(t('heur'), MX, y, PW - 2 * MX, 8, 'F1', C.muted) + 10;
-  // checklist summary of flagged tests
-  const flagged = TESTS.filter(T2 => LIVE[T2.id] && (LIVE[T2.id].status === 'warn' || LIVE[T2.id].status === 'bad'));
-  if (flagged.length) { T((LANG === 'it' ? 'Da controllare' : 'To check').toUpperCase(), MX, y + 10, 8, 'F2', C.accent); y += 24;
-    for (const f of flagged) { T('•', MX, y, 10, 'F2', C.warn); y += para(t(TITLES[f.id]) + ((LIVE[f.id].readout || []).length ? ': ' + LIVE[f.id].readout.join(' · ') : ''), MX + 12, y, PW - 2 * MX - 12, 9.5); } }
+  // ---- page 1: verdict
+  k.MARK(MX, 40, 13); k.T(studio || 'Logo Lab', MX + 19, 50.5, 9, 'F2'); k.T('  · ' + t('rTech'), MX + 19 + textW(studio || 'Logo Lab', 9, true), 50.5, 9, 'F1', C.muted); k.TR(date, MX + CW, 50.5, 9, 'F1', C.muted); k.LINE(MX, 62, MX + CW);
+  k.RR(MX, 80, 150, 150, 9, C.soft); k.IM(logoTile(600, 600, '#f6f7f9', null, .62), MX, 80, 150, 150);
+  k.T(t('rTested').toUpperCase(), MX + 172, 134, 8, 'F2', C.muted); k.T(state.name, MX + 172, 166, 32, 'F2');
+  k.T(`${DATA.file} · ${DATA.svg ? 'SVG' : 'PNG'} · ${nColors() === 1 ? t('color1') : t('colors', { n: nColors() })} · ${t('rTests', { n: N })}`, MX + 172, 184, 9, 'F3', C.muted);
+  // verdict box
+  let y = 248; const paraW = CW - 32, vtext = verdictText(), vh = wrap(vtext, 9.5, paraW).length * 9.5 * 1.45;
+  const boxH = 118 + vh; k.RR(MX, y, CW, boxH, 9, C.soft);
+  const sc = M.score.toFixed(1); k.T(sc, MX + 16, y + 56, 54, 'F2', lv === 'ok' ? C.ink : lv === 'warn' ? C.warnInk : C.badInk); k.T('/ 10', MX + 20 + textW(sc, 54, true), y + 56, 13, 'F1', C.muted);
+  const mx2 = MX + 40 + textW(sc, 54, true) + 30; k.T(t('minSize'), mx2, y + 34, 8.5, 'F1', C.muted); k.T(M.minSize + ' px', mx2, y + 56, 22, 'F2');
+  k.PILL(t(stampKey()), mx2 + textW(M.minSize + ' px', 22, true) + 18, y + 42, lv);
+  const rx = MX + 16, rw = CW - 32, ry = y + 74, pos = rulerPos(M.minSizeRaw) / 100 * rw;
+  k.RR(rx, ry, rw, 7, 3.5, '#e3e6eb'); if (pos > 0) k.RR(rx, ry, pos, 7, 3.5, C.bad); k.RR(rx + pos, ry, rw - pos, 7, 3.5, C.ok); k.R(rx + pos - .8, ry - 4, 1.6, 15, C.ink);
+  [[16, 0], [32, .25], [64, .5], [128, .75], [256, 1]].forEach(([v, p]) => { const s = v + (v === 256 ? ' px' : ''), xx = rx + p * rw; (p === 0 ? k.T : p === 1 ? k.TR : k.TC)(s, xx, ry + 20, 7.5, 'F3', C.muted); });
+  k.P(vtext, MX + 16, ry + 38, paraW, 9.5, 'F1', C.ink2);
+  // metrics 4 × 2
+  y += boxH + 14; const mw = CW / 4, mh = 34;
+  const lim = M.minSizeRaw > 16 ? M.limit : null;
+  const mets = [[t('thin'), pctOfMark(M.tInk) + (lim === 'strokes' ? ' · ' + t('limiting') : ''), lim === 'strokes'], [t('gap'), pctOfMark(M.tGap) + (lim === 'gaps' ? ' · ' + t('limiting') : ''), lim === 'gaps'], [t('fid16'), Math.round((1 - clamp(M.err16)) * 100) + '%'], [t('fid32'), Math.round((1 - clamp(M.err32)) * 100) + '%'],
+    [t('parts'), M.fg256 + ' -> ' + M.fg32], [t('fill'), Math.round(M.fill * 100) + '%'], [t('sym'), Math.round(M.symH * 100) + '%'], [t('neg'), Math.round(M.negRatio * 100) + '% · ' + M.holes]];
+  k.RR(MX, y, CW, mh * 2, 7, null, C.rule);
+  mets.forEach(([a, b, hi], i) => { const cx = MX + (i % 4) * mw, cy = y + Math.floor(i / 4) * mh; if (hi) k.R(cx + .5, cy + .5, mw - 1, mh - 1, '#fdf3f2'); k.T(a, cx + 9, cy + 13, 7.5, 'F1', C.muted); k.T(b, cx + 9, cy + 26, 9, 'F3', C.ink); });
+  k.LINE(MX, y + mh, MX + CW, y + mh); for (let i = 1; i < 4; i++) k.LINE(MX + i * mw, y, MX + i * mw, y + 2 * mh);
+  // to check
+  y += 2 * mh + 22; k.T(t('rToCheck', { n: fl.length, t: N }), MX, y, 10, 'F2'); y += 10;
+  if (!fl.length) { k.RR(MX, y, CW, 28, 6, C.okSoft); k.T(t('rNone'), MX + 10, y + 17.5, 9, 'F1', C.okInk); y += 36; }
+  fl.slice(0, 6).forEach((r, i) => { const bad = LIVE[r.id].status === 'bad', text = t(TITLES[r.id]) + ' — ' + flagText(r.id).what, lines = wrap(text, 8.5, CW - 70), h = 12 + lines.length * 11.5;
+    k.RR(MX, y, CW, h, 6, bad ? C.badBg : C.warnBg, bad ? C.badLine : C.warnLine); k.T(String(i + 1), MX + 10, y + 15, 9, 'F2', bad ? C.badInk : C.warnInk);
+    lines.forEach((l, j) => k.T(l, MX + 26, y + 15 + j * 11.5, 8.5, j === 0 ? 'F1' : 'F1', C.ink2)); k.TR(t('rPage', { n: SEC_PAGE[r.sec] }), MX + CW - 10, y + 15, 7.5, 'F1', C.muted); y += h + 6; });
+  if (fl.length > 6) { k.T('+ ' + (fl.length - 6), MX, y + 8, 8.5, 'F1', C.muted); y += 14; }
+  if (state.note.trim()) { y += 8; const nh = wrap(state.note.trim(), 9.5, CW - 30).length * 9.5 * 1.45 + 26; if (y + nh < PH - 50) { k.R(MX, y, 3, nh, C.accent); k.R(MX + 3, y, CW - 3, nh, C.accentSoft); k.T(t('rNote'), MX + 14, y + 15, 9, 'F2'); k.P(state.note.trim(), MX + 14, y + 29, CW - 30, 9.5, 'F1', C.ink2); } }
+  foot(1);
 
-  // figure pages: two columns, grouped by section (continue on page 1 when there is room)
-  y += 18; if (y > PH - 230) newPage();
-  const gutter = 18, fw = (PW - 2 * MX - gutter) / 2;
-  for (const [sec, title] of SECTIONS) {
-    const items = TESTS.filter(T2 => T2.sec === sec && LIVE[T2.id] && LIVE[T2.id].canvas && !(state.client && ['curv', 'anch', 'weight', 'neg'].includes(T2.id))); if (!items.length) continue;
-    if (y > PH - 340) newPage();
-    T(t(title), MX, y + 14, 14, 'F2'); y += 30; let col = 0, rowH = 0;
-    for (const T2 of items) {
-      const live = LIVE[T2.id], wide = T2.wide, w = wide ? PW - 2 * MX : fw, ih = w * live.canvas.height / live.canvas.width;
-      const noteLines = wrap(t(NOTES[T2.id]), 8, w, false), chips = (live.readout || []).join('  ·  ');
-      const h = 16 + ih + 8 + (chips ? 13 : 0) + noteLines.length * 11 + 14;
-      if (wide && col === 1) { y += rowH; col = 0; rowH = 0; }
-      if (y + h > PH - 52) { newPage(); col = 0; rowH = 0; }
-      const x0 = MX + col * (fw + gutter); let yy = y;
-      T(t(TITLES[T2.id]), x0, yy + 10, 10, 'F2'); if (live.status && live.status !== 'ok') T('!', x0 + w - 6, yy + 10, 10, 'F2', C[live.status]); yy += 16;
-      R(x0 - .5, yy - .5, w + 1, ih + 1, C.rule, true); IM(live.canvas, x0, yy, w); yy += ih + 8;
-      if (chips) { T(chips, x0, yy + 8, 8, 'F3', C.ink); yy += 13; }
-      noteLines.forEach((l, i) => T(l, x0, yy + 8 + i * 11, 8, 'F1', C.muted));
-      rowH = Math.max(rowH, h);
-      if (wide || col === 1) { y += rowH; col = 0; rowH = 0; } else col = 1;
-    }
-    if (col === 1) { y += rowH; }
-    y += 8;
-  }
-  footer(); pages.push({ ops, images: imgs });
-  const blob = buildPdf(pages); if (dry) { let s = ''; for (const p of buildPdf.last) for (let i = 0; i < p.length; i++) s += String.fromCharCode(p[i]); return btoa(s); }
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = ((state.name || 'logo').toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'logo') + '-logo-lab.pdf'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-  toast(t('pdfMade'));
+  // ---- page 2: size & legibility
+  head2(); y = secHead('leg', 74);
+  const scaleSt = status('scale');
+  k.T(t('tScale'), MX, y + 12, 11, 'F2'); k.TR(scaleSt === 'warn' ? t('rMinTag', { s: M.minSize }) : t('rOk'), MX + CW, y + 12, 8.5, 'F2', scaleSt === 'warn' ? C.badInk : C.okInk);
+  const lr = k.IM(ladderCanvas(), MX, y + 20, CW); y += 26 + lr.h;
+  y += k.P(M.minSize > 16 ? t('rLadderBad', { s: M.minSize, f: t(M.limit === 'strokes' ? 'fStrokes' : 'fGaps') }) : t('rLadderOk'), MX, y + 8, CW, 9) + 18;
+  const pixSt = status('pix');
+  k.T(t('tPix'), MX, y + 12, 11, 'F2'); k.TR(pixSt === 'warn' ? t('rCheck') : t('rOk'), MX + CW, y + 12, 8.5, 'F2', pixSt === 'warn' ? C.badInk : C.okInk);
+  y += 22; k.RR(MX, y, CW, 150, 8, C.soft);
+  k.IM(crisp(16, 10), MX + 16, y + 14, 110, 110); k.TC('16 px · ×10', MX + 71, y + 140, 7.5, 'F3', C.muted);
+  k.IM(crisp(32, 5), MX + 142, y + 14, 110, 110); k.TC('32 px · ×5', MX + 197, y + 140, 7.5, 'F3', C.muted);
+  let ty = y + 26; const tx = MX + 274, tw = CW - 290;
+  ty += k.P(t('rPixP'), tx, ty, tw, 9) + 6; ty += k.PB(t('rPix16'), t(M.minSize > 16 ? 'rPix16bad' : 'rPix16ok'), tx, ty, tw, 9) + 6; k.PB(t('rPix32'), t(M.minSize > 32 ? 'rPix32bad' : 'rPix32ok'), tx, ty, tw, 9);
+  y += 168;
+  k.T(t('tBlur'), MX, y + 12, 11, 'F2'); k.TR(t('rOk'), MX + CW, y + 12, 8.5, 'F2', C.okInk); y += 22;
+  const bw = (CW - 30) / 4; [0, 3, 7, 14].forEach((r, i) => { k.IM(blurCanvas(r), MX + i * (bw + 10), y, bw, bw * .75); k.T(t('rBlurL')[i], MX + i * (bw + 10), y + bw * .75 + 12, 8, 'F1', C.muted); });
+  y += bw * .75 + 34; k.P(t("rBlurP"), MX, y, CW, 9);
+  foot(2);
+
+  // ---- page 3: form + context
+  head2(); y = secHead('form', 74);
+  y = tileGrid(['neg', 'weight', 'clear', 'icon', 'curv', 'anch'], y, 3, 104) + 14; k.LINE(MX, y, MX + CW); y += 10;
+  y = secHead('ctx', y); tileGrid(['tabs', 'type', 'card', 'photo', 'bill', 'pat'], y, 3, 104);
+  foot(3);
+
+  // ---- page 4: reproduction, file, next steps
+  head2(); y = secHead('rep', 74);
+  let rest = ['mono', 'mat', 'emb', 'half', 'patch'];
+  if (LIVE.mono && isFlag(LIVE.mono.status)) { const ft = flagText('mono'), ph = (wrap(t('what') + ' ' + ft.what, 9, CW - 28, true).length + wrap(t('fix') + ' ' + ft.fix, 9, CW - 28, true).length) * 13 + 12;
+    const imH = (CW - 28) * 540 / 1440, bh = 34 + imH + ph + 10; k.RR(MX, y, CW, bh, 8, C.warnBg, C.warnLine);
+    k.T(t('tMono'), MX + 14, y + 20, 11, 'F2'); k.TR('! ' + t('monoWarn'), MX + CW - 14, y + 20, 8.5, 'F2', C.warnInk);
+    k.IM(LIVE.mono.canvas, MX + 14, y + 30, CW - 28, imH); const h1 = k.PB(t('what'), ft.what, MX + 14, y + 42 + imH, CW - 28, 9); k.PB(t('fix'), ft.fix, MX + 14, y + 46 + imH + h1, CW - 28, 9);
+    y += bh + 14; rest = rest.slice(1); }
+  y = tileGrid(rest, y, 4, 78) + 14;
+  k.RR(MX, y, CW, 28, 6, C.soft);
+  if (DATA.svg) { const si = LIVE.src.info; k.T(t('rFile'), MX + 10, y + 17.5, 9, 'F2'); k.T(t('rFileLine', { e: si.els, lt: si.live ? t('live') : t('noLive'), im: si.img ? t('img') : t('noImg') }), MX + 70, y + 17.5, 8, 'F3', C.ink2); }
+  else k.T(t('rPng'), MX + 10, y + 17.5, 9, 'F1', C.ink2);
+  y += 44; k.LINE(MX, y, MX + CW); y += 10;
+  k.T(t('rNext'), MX, y + 20, 20, 'F2'); y += 38;
+  nextSteps().forEach(([b, r], i) => { k.T(i + 1 + '.', MX, y, 9.5, 'F2'); y += (b ? k.PB(b, r, MX + 16, y, CW - 16, 9.5) : k.P(r, MX + 16, y, CW - 16, 9.5)) + 5; });
+  foot(4);
 }
 
+function clientPages(k) {
+  const { C, MX, CW } = k, studio = state.studio.trim(), fl = id => LIVE[id] && isFlag(LIVE[id].status), min = M.minSize, small = min > 32;
+  const month = new Date().toLocaleDateString(LANG === 'it' ? 'it-IT' : 'en-GB', { month: 'long', year: 'numeric' });
+  const footL = studio ? t('prepared', { s: studio }) : t('preparedLL');
+  // ---- page 1
+  k.T(studio || 'Logo Lab', MX, 52, 10, 'F2'); k.TR(month.charAt(0).toUpperCase() + month.slice(1), MX + CW, 52, 9, 'F1', C.muted);
+  k.RR(MX, 70, CW, 250, 12, C.warm); k.IM(logoTile(700, 520, C.warm, null, .78), MX + CW / 2 - 95, 92, 190, 140);
+  k.TC(state.name, MX + CW / 2, 268, 28, 'F2'); k.TC(t('cTitle'), MX + CW / 2, 290, 11, 'F1', C.ink2);
+  let y = 352; k.T(t('cBrief'), MX, y, 16, 'F2'); y += 14;
+  const cards = [['ok', t('cStrongBig'), t('cStrongBigP')], ['ok', t('cFar'), t('cFarP')], small ? ['next', t('cSmallNeed'), t('cSmallNeedP')] : ['ok', t('cSmallOk'), t('cSmallOkP')]];
+  const cw = (CW - 24) / 3; let ch = 0; cards.forEach(c => { ch = Math.max(ch, 62 + wrap(c[2], 9, cw - 24).length * 13); });
+  cards.forEach(([kind, h, p], i) => { const cx = MX + i * (cw + 12); k.RR(cx, y, cw, ch, 8, null, C.rule);
+    k.CIRC(cx + 22, y + 22, 10, kind === 'ok' ? C.okSoft : C.accentSoft); k.TC(kind === 'ok' ? 'OK' : '+', cx + 22, y + 25.5, 7, 'F2', kind === 'ok' ? C.okInk : '#9e0d52');
+    k.T(h, cx + 12, y + 48, 10, 'F2'); k.P(p, cx + 12, y + 62, cw - 24, 9); });
+  y += ch + 26; k.T(t('cWhich'), MX, y, 16, 'F2'); y += 14;
+  const vw = small ? (CW - 12) / 2 : CW, vh = 92;
+  k.RR(MX, y, vw, vh, 8, C.soft); k.IM(logoTile(300, 300, C.soft, null, .8), MX + 12, y + 12, 68, 68);
+  k.T(t('cFull'), MX + 92, y + 30, 10, 'F2'); k.T(small ? t('cFrom', { s: min }) : t('cFrom', { s: min }), MX + 92, y + 52, 16, 'F2'); k.T(small ? t('cFullP') : t('cFullAll'), MX + 92, y + 68, 8.5, 'F1', C.ink2);
+  if (small) { const x2 = MX + vw + 12; k.RR(x2, y, vw, vh, 8, null, C.rule2, .9, '3 2'); k.IM(crisp(32, 3), x2 + 18, y + 18, 56, 56);
+    k.T(t('cSmall'), x2 + 92, y + 30, 10, 'F2'); k.T(t('cUnder', { s: min }), x2 + 92, y + 52, 16, 'F2'); k.T(t('cSmallP'), x2 + 92, y + 68, 8.5, 'F1', C.ink2); }
+  y += vh + 22;
+  if (state.note.trim()) { const nh = wrap(state.note.trim(), 10, CW - 30).length * 14.5 + 30; k.R(MX, y, 3, nh, C.accent); k.R(MX + 3, y, CW - 3, nh, C.accentSoft); k.T(t('cStudioNote'), MX + 14, y + 17, 9.5, 'F2'); k.P(state.note.trim(), MX + 14, y + 33, CW - 30, 10, 'F1', C.ink2); }
+  k.page(footL, '1 / 2');
+  // ---- page 2
+  k.T(studio || 'Logo Lab', MX, 52, 10, 'F2'); k.TR(state.name, MX + CW, 52, 9, 'F1', C.muted);
+  k.T(t('cWhere'), MX, 92, 22, 'F2'); y = 108;
+  const draw = (id, opt) => { const T = TESTS.find(x => x.id === id); return T ? T.draw({ opt, val: T.slider ? T.slider.value : 0, info: {} }) : null; };
+  const ctx = [[LIVE.card && LIVE.card.canvas, t('cCtxCard')], [LIVE.bill && LIVE.bill.canvas, t('cCtxBill')], [draw('mat', 1), t('cCtxKraft')], [draw('pat', 0), t('cCtxPat')], [draw('emb', 0), t('cCtxEmb')], [LIVE.tabs && LIVE.tabs.canvas, t('cCtxTab')]];
+  const tw = (CW - 24) / 3, th = tw * .75;
+  ctx.forEach(([cv, label], i) => { const cx = MX + (i % 3) * (tw + 12), cy = y + Math.floor(i / 3) * (th + 32); k.RR(cx, cy, tw, th, 8, C.soft); k.IM(cv, cx, cy, tw, th); k.T(label, cx, cy + th + 14, 9.5, 'F2'); });
+  y += 2 * (th + 32) + 18; k.T(t('cAvoid'), MX, y, 16, 'F2'); y += 14;
+  const avoid = [];
+  if (min > 16) avoid.push([crisp(Math.max(8, Math.round(min / 4)), Math.round(96 / Math.max(8, Math.round(min / 4)))), t('cAvSmall', { s: min })]);
+  if (fl('mono')) avoid.push([logoTile(300, 225, '#f6f7f9', state.mono, .7), t('cAvMono')]);
+  const sq = canvas(300, 225), sx = sq.getContext('2d'); sx.fillStyle = '#f6f7f9'; sx.fillRect(0, 0, 300, 225); sx.drawImage(logoCanvas(220, null, 0), 40, 70, 220, 90); avoid.push([sq, t('cAvDistort')]);
+  const aw = (CW - 24) / 3, ah = 84;
+  avoid.forEach(([cv, txt], i) => { const cx = MX + i * (aw + 12); k.RR(cx, y, aw, ah, 8, C.soft); k.IM(cv, cx + 10, y + 8, aw - 20, ah - 16); k.CIRC(cx + aw - 14, y + 14, 8, C.bad); k.TC('X', cx + aw - 14, y + 17, 8, 'F2', '#ffffff'); k.P(txt, cx, y + ah + 14, aw, 9, 'F1', C.ink2); });
+  k.page(t('cFootQ') + (studio ? ' · ' + studio : ''), '2 / 2');
+}
+
+function exportPdf(mode = 'designer', dry = false) {
+  if (!DATA || M.empty) return;
+  const k = pdfKit(); (mode === 'client' ? clientPages : designerPages)(k);
+  const blob = buildPdf(k.pages);
+  if (dry) { let s = ''; for (const p of buildPdf.last) for (let i = 0; i < p.length; i++) s += String.fromCharCode(p[i]); return btoa(s); }
+  download(blob, slug() + (mode === 'client' ? '-brand-guide.pdf' : '-logo-lab-report.pdf')); toast(t('pdfMade'));
+}
+
+// ---------------- boot ----------------
+document.querySelectorAll('#langgroup button').forEach(b => b.onclick = () => { LANG = b.dataset.lang; try { localStorage.setItem('logolab-lang', LANG); } catch (e) {} applyStatic(); if (DATA && !M.empty && RES.length) { computeAll(); render(); if (!$('#exback').hidden) renderExport(); } else showDrop(); });
+$('#open').onchange = e => { openFile(e.target.files[0]); e.target.value = ''; };
+$('#exportBtn').onclick = openExport; $('#exportBtn2').onclick = openExport;
 applyStatic();
 if (DATA) start(); else showDrop();
-</script>
-</body>
-</html>
+</script></body></html>
